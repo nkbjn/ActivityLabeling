@@ -16,17 +16,10 @@ class SettingViewController: FormViewController {
         self.title = "設定"
 
         form
-            +++ Section(header:"接続先", footer:"InfluxDBのURLを入力してください")
+            +++ Section(header:"接続先", footer:"InfluxDBへの接続先情報を入力してください")
             
                 <<< URLRow() {
-                    $0.title = "URL"
-                    $0.add(rule: RuleURL())
-                    $0.validationOptions = .validatesOnChange
-                    }
-                    .cellUpdate { cell, row in
-                        if !row.isValid {
-                            cell.titleLabel?.textColor = .red
-                        }
+                    $0.title = "IP/ホスト名"
                 }
             
             +++ Section(header:"行動ラベル", footer:"")
