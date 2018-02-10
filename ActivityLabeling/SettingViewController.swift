@@ -27,6 +27,13 @@ class SettingViewController: FormViewController {
             <<< ButtonRow(){
                 $0.title = "変更"
                 $0.presentationMode = .segueName(segueName: "ActivitySelectViewControllerControllerSegue", onDismiss: nil)
+            }
+            
+            +++ Section(header:"ラベリング周期", footer:"")
+                
+            <<< IntRow() {
+                $0.title = "周期(s)"
+                $0.value = 10
         }
     }
 }
