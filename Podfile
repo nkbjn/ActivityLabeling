@@ -6,5 +6,7 @@ target 'ActivityLabeling' do
   use_frameworks!
 
   # Pods for ActivityLabeling
+  pod 'RxSwift',    '~> 4.0'
+  pod 'RxCocoa',    '~> 4.0'
 
 end
