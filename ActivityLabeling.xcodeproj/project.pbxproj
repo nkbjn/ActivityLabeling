@@ -13,6 +13,7 @@
 		3445449A202E8D020038DCF5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34454498202E8D020038DCF5 /* LaunchScreen.storyboard */; };
 		344544A2202EB0FE0038DCF5 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344544A1202EB0FE0038DCF5 /* ConfigViewController.swift */; };
 		344544A7202EF5980038DCF5 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344544A6202EF5980038DCF5 /* Config.swift */; };
+		344544A9202F1B3C0038DCF5 /* DefaultConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 344544A8202F1B3C0038DCF5 /* DefaultConfig.plist */; };
 		B112682AED6E18EBF924BD04 /* Pods_ActivityLabeling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB54DD79EC334BABFDD325C4 /* Pods_ActivityLabeling.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,7 @@
 		3445449B202E8D020038DCF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		344544A1202EB0FE0038DCF5 /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		344544A6202EF5980038DCF5 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		344544A8202F1B3C0038DCF5 /* DefaultConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultConfig.plist; sourceTree = "<group>"; };
 		AB54DD79EC334BABFDD325C4 /* Pods_ActivityLabeling.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ActivityLabeling.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9410C94B9F09F5C3BFB9AD5 /* Pods-ActivityLabeling.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActivityLabeling.release.xcconfig"; path = "Pods/Target Support Files/Pods-ActivityLabeling/Pods-ActivityLabeling.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,6 +76,7 @@
 				3445448F202E8D020038DCF5 /* AppDelegate.swift */,
 				344544A1202EB0FE0038DCF5 /* ConfigViewController.swift */,
 				344544A6202EF5980038DCF5 /* Config.swift */,
+				344544A8202F1B3C0038DCF5 /* DefaultConfig.plist */,
 				34454493202E8D020038DCF5 /* Main.storyboard */,
 				34454496202E8D020038DCF5 /* Assets.xcassets */,
 				34454498202E8D020038DCF5 /* LaunchScreen.storyboard */,
@@ -153,6 +156,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				344544A9202F1B3C0038DCF5 /* DefaultConfig.plist in Resources */,
 				3445449A202E8D020038DCF5 /* LaunchScreen.storyboard in Resources */,
 				34454497202E8D020038DCF5 /* Assets.xcassets in Resources */,
 				34454495202E8D020038DCF5 /* Main.storyboard in Resources */,

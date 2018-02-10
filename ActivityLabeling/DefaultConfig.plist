@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>host</key>
+	<string>ubi-t08.naist.jp</string>
+	<key>activityList</key>
+	<array>
+		<string>cooking</string>
+		<string>watching_tv</string>
+		<string>sleeping</string>
+		<string>bathing</string>
+	</array>
+	<key>period</key>
+	<integer>10</integer>
+</dict>
+</plist>
