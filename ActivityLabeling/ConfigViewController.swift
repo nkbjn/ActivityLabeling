@@ -21,6 +21,7 @@ class ConfigViewController: FormViewController {
             +++ Section(header:"接続先", footer:"InfluxDBへの接続先情報を入力してください")
             
                 <<< TextRow() {
+                    $0.tag = Config.host
                     $0.title = "IP/ホスト名"
                     $0.value = defaults.string(forKey: Config.host)
                 }.onChange { row in
@@ -37,11 +38,36 @@ class ConfigViewController: FormViewController {
             +++ Section(header:"ラベリング周期", footer:"")
                 
                 <<< IntRow() {
+                    $0.tag = Config.period
                     $0.title = "周期(s)"
                     $0.value = defaults.integer(forKey: Config.period)
                 }.onChange { row in
                     self.defaults.set(row.value, forKey: Config.period)
         }
+        
+    }
+    
+    @IBAction func reset(_ sender: Any) {
+        let alert = UIAlertController(title: "設定の初期化", message: "本当に初期化してよろしいですか？", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            self.resetConfig()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true)
+    }
+    
+    func resetConfig() {
+        DefaultConfig().reset()
+        
+        let host = form.rowBy(tag: Config.host) as! TextRow
+        host.value = defaults.string(forKey: Config.host)
+        host.reload()
+        
+        let period = form.rowBy(tag: Config.period) as! IntRow
+        period.value = defaults.integer(forKey: Config.period)
+        period.reload()
     }
     
 }
