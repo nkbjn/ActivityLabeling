@@ -10,5 +10,6 @@ target 'ActivityLabeling' do
   pod 'RxCocoa',    '~> 4.0'
   pod 'Eureka'
   pod 'RealmSwift'
+  pod 'APIKit', 	'~> 3.1'
 
 end
