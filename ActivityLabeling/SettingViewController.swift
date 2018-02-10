@@ -13,6 +13,7 @@ class SettingViewController: FormViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "設定"
 
     }
 }
