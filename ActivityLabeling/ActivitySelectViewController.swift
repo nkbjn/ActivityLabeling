@@ -8,6 +8,7 @@
 
 import UIKit
 import Eureka
+import RealmSwift
 
 class ActivitySelectViewController: FormViewController {
     
@@ -34,10 +35,10 @@ class ActivitySelectViewController: FormViewController {
                     }
                 }
                 
-                for tag in activityList {
+                for activity in activityList {
                     $0 <<< TextRow {
                         $0.placeholder = "行動名"
-                        $0.value = tag
+                        $0.value = activity
                     }
                 }
         }
