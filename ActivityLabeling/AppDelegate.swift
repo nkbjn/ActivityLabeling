@@ -17,17 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        let defaults = UserDefaults.standard
-        
-        if defaults.object(forKey: Config.activityList) == nil {
-            let activityList = ["WatchingTV", "Reading", "Sleeping", "Cooking"]
-            defaults.set(activityList, forKey: Config.activityList)
-        }
-        
-        if defaults.object(forKey: Config.period) == nil {
-            let period = 10
-            defaults.set(period, forKey: Config.period)
-        }
+        DefaultConfig().setup()
         
         return true
     }
