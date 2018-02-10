@@ -27,13 +27,11 @@ class ConfigViewController: FormViewController {
                     self.defaults.set(row.value, forKey: Config.host)
             }
             
-            +++ Section(header:"行動ラベル", footer:"") {
+            +++ Section(header:"行動ラベル", footer:"")
                 
-                $0 <<< ButtonRow(){
+                <<< ButtonRow(){
                     $0.title = "変更"
                     $0.presentationMode = .segueName(segueName: "ActivitySelectViewControllerControllerSegue", onDismiss: nil)
-                }
-
             }
             
             +++ Section(header:"ラベリング周期", footer:"")
