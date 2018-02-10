@@ -20,9 +20,9 @@ class ConfigViewController: FormViewController {
         form
             +++ Section(header:"接続先", footer:"InfluxDBへの接続先情報を入力してください")
             
-                <<< URLRow() {
+                <<< TextRow() {
                     $0.title = "IP/ホスト名"
-                    $0.value = defaults.url(forKey: Config.host)
+                    $0.value = defaults.string(forKey: Config.host)
                 }.onChange { row in
                     self.defaults.set(row.value, forKey: Config.host)
             }
