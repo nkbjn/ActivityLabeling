@@ -101,10 +101,28 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="" id="toK-d5-Fio"/>
                     <navigationItem key="navigationItem" id="RqK-2b-qUQ"/>
+                    <connections>
+                        <segue destination="EgG-9u-lBD" kind="presentation" identifier="LabelingViewControllerSegue" id="cy4-wm-fdF"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="swi-nI-bEh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-26" y="-412"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="x9u-Ri-wwd">
+            <objects>
+                <viewController id="EgG-9u-lBD" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gwM-il-Vwo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="D8k-CZ-rzf"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VI2-hj-Xnl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="838" y="-412"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="5zR-Ao-v2V">
