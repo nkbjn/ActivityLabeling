@@ -29,7 +29,7 @@ class ActivitySelectViewController: FormViewController {
                     }
                 }
                 $0.multivaluedRowToInsertAt = { index in
-                    return NameRow() {
+                    return TextRow() {
                         $0.placeholder = "行動名"
                     }
                 }
