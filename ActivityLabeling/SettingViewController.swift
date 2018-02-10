@@ -29,5 +29,11 @@ class SettingViewController: FormViewController {
                         }
                 }
             
+            +++ Section(header:"行動ラベル", footer:"")
+            
+            <<< ButtonRow(){
+                $0.title = "変更"
+                $0.presentationMode = .segueName(segueName: "ActivitySelectViewControllerControllerSegue", onDismiss: nil)
+        }
     }
 }
