@@ -9,6 +9,7 @@
 import UIKit
 import Eureka
 import RealmSwift
+import APIKit
 
 class SetupViewController: FormViewController {
 
@@ -35,6 +36,29 @@ class SetupViewController: FormViewController {
                 }.onCellSelection { _, _ in
                     let database = self.defaults.string(forKey: Config.database)
                     let host = self.defaults.string(forKey: Config.host)
+                    let influxdb = InfluxDBClient(host: URL(string: host!)! ,databaseName: database!)
+                    let request = PingRequest(influxdb: influxdb)
+                    Session.send(request) { result in
+                        switch result {
+                        case .success(let response):
+                            print(response)
+                        case .failure(let error):
+                            print(printError(error))
+                        }
+                        
+                    }
+                    func printError(_ error: SessionTaskError) {
+                        switch error {
+                        case .responseError(let error as InfluxDBError):
+                            print(error.message) // Prints message from InfluxDB API
+                            
+                        case .connectionError(let error):
+                            print("Connection error: \(error)")
+                            
+                        default:
+                            print("System error :bow:")
+                        }
+                    }
             }
             
             +++ Section()
