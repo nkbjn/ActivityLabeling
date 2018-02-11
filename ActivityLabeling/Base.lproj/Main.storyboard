@@ -99,10 +99,10 @@
             </objects>
             <point key="canvasLocation" x="-26" y="-412"/>
         </scene>
-        <!--View Controller-->
+        <!--Labeling View Controller-->
         <scene sceneID="x9u-Ri-wwd">
             <objects>
-                <viewController id="EgG-9u-lBD" sceneMemberID="viewController">
+                <viewController id="EgG-9u-lBD" customClass="LabelingViewController" customModule="ActivityLabeling" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gwM-il-Vwo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
