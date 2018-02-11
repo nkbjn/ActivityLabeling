@@ -8,6 +8,7 @@
 
 import UIKit
 import Eureka
+import RealmSwift
 
 class SetupViewController: FormViewController {
 
@@ -56,27 +57,42 @@ class SetupViewController: FormViewController {
             <<< ButtonRow() {
                 $0.title = "ラベリング開始"
                 }.onCellSelection { _, _ in
-                    let host = self.defaults.string(forKey: Config.host)
-                    let activityList = self.defaults.stringArray(forKey: Config.activityList)
-                    let period = self.defaults.string(forKey: Config.period)
+                    self.start()
                     
-                    var message = "接続先：\(host!) \n\n"
-                    message = message + "対象行動\n"
-                    for activity in activityList! {
-                        message = message + "・\(activity)\n"
-                    }
-                    message = message + "\nラベリング周期：\(period!) 秒"
-                    
-                    let alert = UIAlertController(title: "ラベリング開始", message: message, preferredStyle: .alert)
-                    
-                    alert.addAction(UIAlertAction(title: "開始", style: .default, handler: { action in
-                        self.performSegue(withIdentifier: "LabelingViewControllerSegue", sender: nil)
-                    }))
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                    
-                    self.present(alert, animated: true)
             }
         
+    }
+    
+    func start() {
+        let labeling = Labeling()
+        labeling.host = self.defaults.string(forKey: Config.host)!
+        let activityList = self.defaults.stringArray(forKey: Config.activityList)
+        for activity in activityList! {
+            let act = Activity()
+            act.activity = activity
+            labeling.activityList.append(act)
+        }
+        labeling.period = self.defaults.integer(forKey: Config.period)
+        
+        var message = "接続先：\(labeling.host) \n\n"
+        message = message + "対象行動\n"
+        for activity in labeling.activityList {
+            message = message + "・\(activity)\n"
+        }
+        message = message + "\nラベリング周期：\(labeling.period) 秒"
+        
+        let alert = UIAlertController(title: "ラベリング開始", message: message, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "開始", style: .default, handler: { action in
+            let realm = try! Realm()
+            try! realm.write {
+                realm.add(labeling)
+            }
+            self.performSegue(withIdentifier: "LabelingViewControllerSegue", sender: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true)
     }
     
     @IBAction func reset(_ sender: Any) {
