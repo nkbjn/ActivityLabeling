@@ -19,11 +19,11 @@ class SetupViewController: FormViewController {
         self.title = "ラベリング"
         
         form
-            +++ Section(header:"接続先", footer:"InfluxDBへの接続先情報を入力してください")
+            +++ Section()
             
             <<< TextRow() {
                 $0.tag = Config.host
-                $0.title = "IP/ホスト名"
+                $0.title = "接続先"
                 $0.value = defaults.string(forKey: Config.host)
                 }.onChange { row in
                     self.defaults.set(row.value, forKey: Config.host)
@@ -35,24 +35,24 @@ class SetupViewController: FormViewController {
                     
             }
             
-            +++ Section(header:"行動ラベル", footer:"")
+            +++ Section()
             
             <<< ButtonRow(){
                 $0.title = "対象行動の確認/変更"
                 $0.presentationMode = .segueName(segueName: "ActivitySelectViewControllerControllerSegue", onDismiss: nil)
             }
             
-            +++ Section(header:"ラベリング周期", footer:"")
+            +++ Section()
             
             <<< IntRow() {
                 $0.tag = Config.period
-                $0.title = "周期(s)"
+                $0.title = "ラベリング周期(秒)"
                 $0.value = defaults.integer(forKey: Config.period)
                 }.onChange { row in
                     self.defaults.set(row.value, forKey: Config.period)
             }
             
-            +++ Section(header:"", footer:"")
+            +++ Section()
             
             <<< ButtonRow() {
                 $0.title = "ラベリング開始"
