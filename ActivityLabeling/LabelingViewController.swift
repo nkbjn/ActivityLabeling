@@ -32,6 +32,9 @@ class LabelingViewController: FormViewController {
                     $0 <<< SwitchRow {
                         $0.title = activity
                         $0.value = false
+                        }.onChange{row in
+                            row.cell.backgroundColor = row.value! ? UIColor.darkGray : UIColor.white
+                            row.cell.textLabel?.textColor = row.value! ? UIColor.white : UIColor.black
                     }
                 }
                 
