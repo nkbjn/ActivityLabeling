@@ -31,6 +31,10 @@ open class InfluxDBClient {
     open func write(measurement: String, tags: Tags = [:], fields: Fields) {
         send(WriteRequest.init(influxdb: self, measurement: measurement, tags: tags, fields: fields))
     }
+    
+    open func ping() {
+        send(PingRequest.init(influxdb: self))
+    }
 
     private func send<R: InfluxDBRequest>(_ request: R) {
         Session.send(request) { result in

@@ -32,7 +32,10 @@ class SetupViewController: FormViewController {
             <<< ButtonRow() {
                 $0.title = "接続テスト"
                 }.onCellSelection { _, _ in
-                    
+                    let database = self.defaults.string(forKey: Config.database)
+                    let host = self.defaults.string(forKey: Config.host)
+                    let influxdb = InfluxDBClient(host: URL(string:host!)!, databaseName: database!)
+                    influxdb.ping()
             }
             
             +++ Section()

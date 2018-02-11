@@ -25,6 +25,7 @@
 		344544C62030148B0038DCF5 /* InfluxDBRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344544C02030148B0038DCF5 /* InfluxDBRequest.swift */; };
 		344544C72030148B0038DCF5 /* WriteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344544C12030148B0038DCF5 /* WriteRequest.swift */; };
 		344544C920303B570038DCF5 /* LabelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344544C820303B570038DCF5 /* LabelTableViewController.swift */; };
+		344544CB2030467F0038DCF5 /* PingRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344544CA2030467F0038DCF5 /* PingRequest.swift */; };
 		B112682AED6E18EBF924BD04 /* Pods_ActivityLabeling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB54DD79EC334BABFDD325C4 /* Pods_ActivityLabeling.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		344544C02030148B0038DCF5 /* InfluxDBRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfluxDBRequest.swift; sourceTree = "<group>"; };
 		344544C12030148B0038DCF5 /* WriteRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WriteRequest.swift; sourceTree = "<group>"; };
 		344544C820303B570038DCF5 /* LabelTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTableViewController.swift; sourceTree = "<group>"; };
+		344544CA2030467F0038DCF5 /* PingRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingRequest.swift; sourceTree = "<group>"; };
 		AB54DD79EC334BABFDD325C4 /* Pods_ActivityLabeling.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ActivityLabeling.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9410C94B9F09F5C3BFB9AD5 /* Pods-ActivityLabeling.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActivityLabeling.release.xcconfig"; path = "Pods/Target Support Files/Pods-ActivityLabeling/Pods-ActivityLabeling.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,6 +121,7 @@
 				344544BC2030148B0038DCF5 /* InfluxDBResponse.swift */,
 				344544BD2030148B0038DCF5 /* InfluxDBError.swift */,
 				344544BE2030148B0038DCF5 /* InfluxDBClient.swift */,
+				344544CA2030467F0038DCF5 /* PingRequest.swift */,
 				344544BF2030148B0038DCF5 /* QueryRequest.swift */,
 				344544C02030148B0038DCF5 /* InfluxDBRequest.swift */,
 				344544C12030148B0038DCF5 /* WriteRequest.swift */,
@@ -288,6 +291,7 @@
 				344544C22030148B0038DCF5 /* InfluxDBResponse.swift in Sources */,
 				344544B4202F5D950038DCF5 /* LabelingViewController.swift in Sources */,
 				344544AD202F3B8E0038DCF5 /* HistoryTableViewController.swift in Sources */,
+				344544CB2030467F0038DCF5 /* PingRequest.swift in Sources */,
 				344544C62030148B0038DCF5 /* InfluxDBRequest.swift in Sources */,
 				344544B1202F55BC0038DCF5 /* SetupViewController.swift in Sources */,
 				344544C32030148B0038DCF5 /* InfluxDBError.swift in Sources */,
