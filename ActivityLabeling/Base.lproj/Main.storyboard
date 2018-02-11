@@ -91,7 +91,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="EgG-9u-lBD" kind="presentation" identifier="LabelingViewControllerSegue" id="cy4-wm-fdF"/>
+                        <segue destination="EgG-9u-lBD" kind="presentation" identifier="LabelingViewControllerSegue" modalTransitionStyle="crossDissolve" id="cy4-wm-fdF"/>
                         <segue destination="mzJ-Rz-KuS" kind="show" identifier="ActivitySelectViewControllerControllerSegue" id="3yM-zo-6l5"/>
                     </connections>
                 </viewController>
