@@ -24,6 +24,7 @@ class HistoryTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         labelings = realm.objects(Labeling.self)
+        tableView.reloadData()
     }
 
     // MARK: - Table view data source
