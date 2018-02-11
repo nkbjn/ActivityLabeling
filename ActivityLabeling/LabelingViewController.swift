@@ -93,8 +93,6 @@ class LabelingViewController: FormViewController {
                     let measurement = defaults.string(forKey: Config.measurement)
                     let field = defaults.string(forKey: Config.field)
                     let host = defaults.string(forKey: Config.host)
-                    let influxdb = InfluxDBClient(host: URL(string:host!)!, databaseName: database!)
-                    influxdb.write(measurement: measurement!, fields: [field!:name])
                 }
             }
         }
