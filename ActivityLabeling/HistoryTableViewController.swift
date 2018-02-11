@@ -12,14 +12,14 @@ import RealmSwift
 class HistoryTableViewController: UITableViewController {
     
     lazy var realm = try! Realm()
-    var labels: Results<Label>!
+    var labelings: Results<Labeling>!
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "履歴"
         
-        labels = realm.objects(Label.self)
+        labelings = realm.objects(Labeling.self)
 
     }
 
@@ -30,23 +30,23 @@ class HistoryTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return labels.count
+        return labelings.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        let label = labels[indexPath.row]
-        
-        cell.textLabel?.text = label.activities.reduce(""){(result, label) in
-            return result + label.activity
-        }
+        let labeling = labelings[indexPath.row]
         
         let f = DateFormatter()
         f.dateStyle = .medium
         f.timeStyle = .medium
         f.locale = Locale(identifier: "ja_JP")
-        cell.detailTextLabel?.text = f.string(from: label.time)
+        cell.textLabel?.text = f.string(from: labeling.startTime)
+        
+        cell.detailTextLabel?.text = labeling.activityList.reduce(""){(result, activity) in
+            return result + ", " + activity.name
+        }
         
         return cell
     }

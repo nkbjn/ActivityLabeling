@@ -28,5 +28,5 @@ class Label: Object {
 }
 
 class Activity: Object {
-    @objc dynamic var activity = ""
+    @objc dynamic var name = ""
 }

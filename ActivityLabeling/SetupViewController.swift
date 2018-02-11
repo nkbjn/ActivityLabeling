@@ -67,17 +67,17 @@ class SetupViewController: FormViewController {
         let labeling = Labeling()
         labeling.host = self.defaults.string(forKey: Config.host)!
         let activityList = self.defaults.stringArray(forKey: Config.activityList)
-        for activity in activityList! {
-            let act = Activity()
-            act.activity = activity
-            labeling.activityList.append(act)
+        for name in activityList! {
+            let activity = Activity()
+            activity.name = name
+            labeling.activityList.append(activity)
         }
         labeling.period = self.defaults.integer(forKey: Config.period)
         
         var message = "接続先：\(labeling.host) \n\n"
         message = message + "対象行動\n"
         for activity in labeling.activityList {
-            message = message + "・\(activity)\n"
+            message = message + "・\(activity.name)\n"
         }
         message = message + "\nラベリング周期：\(labeling.period) 秒"
         
