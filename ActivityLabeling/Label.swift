@@ -23,8 +23,13 @@ class Labeling: Object {
 }
 
 class Label: Object {
+    @objc dynamic var id = NSUUID().uuidString
     @objc dynamic var time = Date()
     let activities = List<Activity>()
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }
 
 class Activity: Object {

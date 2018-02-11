@@ -1,51 +1,53 @@
 //
-//  HistoryTableViewController.swift
+//  LabelTableViewController.swift
 //  ActivityLabeling
 //
-//  Created by Wataru Sasaki on 2018/02/10.
+//  Created by Wataru Sasaki on 2018/02/11.
 //  Copyright © 2018年 Wataru Sasaki. All rights reserved.
 //
 
 import UIKit
 import RealmSwift
 
-class HistoryTableViewController: UITableViewController {
-    
-    lazy var realm = try! Realm()
-    var labelings: Results<Labeling>!
-    var selectedID: String?
+class LabelTableViewController: UITableViewController {
 
+    lazy var realm = try! Realm()
+    var labels: Results<Label>!
+    var selectedID: String?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "履歴"
+        self.title = "ラベル"
         
-        labelings = realm.objects(Labeling.self)
-
+        labels = realm.objects(Label.self)
+        
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return labelings.count
+        return labels.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        let labeling = labelings[indexPath.row]
+        let label = labels[indexPath.row]
         
         let f = DateFormatter()
         f.dateStyle = .medium
         f.timeStyle = .medium
         f.locale = Locale(identifier: "ja_JP")
-        cell.textLabel?.text = f.string(from: labeling.startTime)
+        cell.textLabel?.text = f.string(from: label.time)
         
-        cell.detailTextLabel?.text = "接続先：\(labeling.host)  ラベリング周期：\(labeling.period)秒"
+        cell.detailTextLabel?.text = label.activities.reduce("activity:") { (result, activity) in
+            return result + " " + activity.name
+        }
         
         cell.accessoryType = .disclosureIndicator
         
@@ -53,17 +55,16 @@ class HistoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let labeling = labelings[indexPath.row]
-        selectedID = labeling.id
-        performSegue(withIdentifier: "LabelTableViewControllerSegue", sender: nil)
+        let label = labels[indexPath.row]
+        selectedID = label.id
+        performSegue(withIdentifier: "", sender: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "LabelTableViewControllerSegue" {
-            let vc = segue.destination as! LabelTableViewController
-            vc.selectedID = selectedID
+        if segue.identifier == "" {
+            
         }
     }
-
+    
 }
+
