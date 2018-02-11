@@ -8,10 +8,12 @@
 
 import UIKit
 import Eureka
+import RealmSwift
 
 class LabelingViewController: FormViewController {
     
     var timer: Timer?
+    let realm = try! Realm()
     let defaults = UserDefaults.standard
     let activityList = UserDefaults.standard.stringArray(forKey: Config.activityList)
     
@@ -67,7 +69,19 @@ class LabelingViewController: FormViewController {
     
     @objc func save() {
         let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
-        print(section.values())
+        let label = Label()
+        for (name, value) in zip(activityList!, section.values()) {
+            if let isOn = value as? Bool {
+                if isOn {
+                    let activity = Activity()
+                    activity.name = name
+                    label.activities.append(activity)
+                }
+            }
+        }
+        try! realm.write {
+            realm.add(label)
+        }
     }
 
 }
