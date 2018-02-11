@@ -45,7 +45,7 @@ class SetupViewController: FormViewController {
                     self.defaults.set(row.value, forKey: Config.period)
             }
             
-            +++ Section()
+            +++ Section(header:"", footer:"")
             
             <<< ButtonRow() {
                 $0.title = "ラベリング開始"
