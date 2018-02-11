@@ -12,7 +12,7 @@ import RealmSwift
 class LabelTableViewController: UITableViewController {
 
     lazy var realm = try! Realm()
-    var labels: Results<Label>!
+    var labels: List<Label>!
     var selectedID: String?
     
     
@@ -21,7 +21,8 @@ class LabelTableViewController: UITableViewController {
         self.title = "ラベル"
         tableView.allowsSelection = false
         
-        labels = realm.objects(Label.self)
+        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: selectedID)
+        labels = labeling?.labels
         
     }
     

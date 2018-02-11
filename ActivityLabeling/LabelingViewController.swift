@@ -12,6 +12,7 @@ import RealmSwift
 
 class LabelingViewController: FormViewController {
     
+    var id: String?
     var timer: Timer?
     let realm = try! Realm()
     let defaults = UserDefaults.standard
@@ -69,6 +70,7 @@ class LabelingViewController: FormViewController {
     
     @objc func save() {
         let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
+        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: id)
         let label = Label()
         for (name, value) in zip(activityList!, section.values()) {
             if let isOn = value as? Bool {
@@ -80,7 +82,7 @@ class LabelingViewController: FormViewController {
             }
         }
         try! realm.write {
-            realm.add(label)
+            labeling?.labels.append(label)
         }
     }
     

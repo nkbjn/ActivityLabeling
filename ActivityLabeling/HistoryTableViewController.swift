@@ -11,7 +11,7 @@ import RealmSwift
 
 class HistoryTableViewController: UITableViewController {
     
-    lazy var realm = try! Realm()
+    let realm = try! Realm()
     var labelings: Results<Labeling>!
     var selectedID: String?
 
@@ -19,9 +19,11 @@ class HistoryTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "履歴"
-        
-        labelings = realm.objects(Labeling.self)
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        labelings = realm.objects(Labeling.self)
     }
 
     // MARK: - Table view data source
@@ -53,9 +55,9 @@ class HistoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
         let labeling = labelings[indexPath.row]
         selectedID = labeling.id
+        tableView.deselectRow(at: indexPath, animated: true)
         performSegue(withIdentifier: "LabelTableViewControllerSegue", sender: nil)
     }
     

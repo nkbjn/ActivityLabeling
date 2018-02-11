@@ -13,6 +13,7 @@ import RealmSwift
 class SetupViewController: FormViewController {
 
     let defaults = UserDefaults.standard
+    var id: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +67,7 @@ class SetupViewController: FormViewController {
     
     func start() {
         let labeling = Labeling()
+        self.id = labeling.id
         labeling.host = self.defaults.string(forKey: Config.host)!
         let activityList = self.defaults.stringArray(forKey: Config.activityList)
         for name in activityList! {
@@ -117,6 +119,13 @@ class SetupViewController: FormViewController {
         let period = form.rowBy(tag: Config.period) as! IntRow
         period.value = defaults.integer(forKey: Config.period)
         period.reload()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "LabelingViewControllerSegue" {
+            let vc = segue.destination as! LabelingViewController
+            vc.id = id
+        }
     }
     
 }
