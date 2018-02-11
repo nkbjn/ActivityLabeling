@@ -15,7 +15,7 @@ class SetupViewController: FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "ラベリング準備"
+        self.title = "ラベリング"
         
         form
             +++ Section(header:"接続先", footer:"InfluxDBへの接続先情報を入力してください")
