@@ -56,7 +56,25 @@ class SetupViewController: FormViewController {
             <<< ButtonRow() {
                 $0.title = "ラベリング開始"
                 }.onCellSelection { _, _ in
-                    self.performSegue(withIdentifier: "LabelingViewControllerSegue", sender: nil)
+                    let host = self.defaults.string(forKey: Config.host)
+                    let activityList = self.defaults.stringArray(forKey: Config.activityList)
+                    let period = self.defaults.string(forKey: Config.period)
+                    
+                    var message = "接続先：\(host!) \n\n"
+                    message = message + "対象行動\n"
+                    for activity in activityList! {
+                        message = message + "・\(activity)\n"
+                    }
+                    message = message + "\nラベリング周期：\(period!) 秒"
+                    
+                    let alert = UIAlertController(title: "ラベリング開始", message: message, preferredStyle: .alert)
+                    
+                    alert.addAction(UIAlertAction(title: "開始", style: .default, handler: { action in
+                        self.performSegue(withIdentifier: "LabelingViewControllerSegue", sender: nil)
+                    }))
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                    
+                    self.present(alert, animated: true)
             }
         
     }
