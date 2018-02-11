@@ -9,6 +9,9 @@
 import Foundation
 
 struct Config {
+    static let database = "database"
+    static let measurement = "measurement"
+    static let field = "field"
     static let host = "host"
     static let activityList = "activityList"
     static let period = "period"

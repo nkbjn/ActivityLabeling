@@ -83,5 +83,21 @@ class LabelingViewController: FormViewController {
             realm.add(label)
         }
     }
+    
+    @objc func writeRequest() {
+        let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
+        for (name, value) in zip(activityList!, section.values()) {
+            if let isOn = value as? Bool {
+                if isOn {
+                    let database = defaults.string(forKey: Config.database)
+                    let measurement = defaults.string(forKey: Config.measurement)
+                    let field = defaults.string(forKey: Config.field)
+                    let host = defaults.string(forKey: Config.host)
+                    let influxdb = InfluxDBClient(host: URL(string:host!)!, databaseName: database!)
+                    influxdb.write(measurement: measurement!, fields: [field!:name])
+                }
+            }
+        }
+    }
 
 }

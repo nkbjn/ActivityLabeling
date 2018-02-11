@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>database</key>
+	<string>test</string>
+	<key>measurement</key>
+	<string>label</string>
+	<key>field</key>
+	<string>activity</string>
 	<key>host</key>
 	<string>ubi-t08.naist.jp</string>
 	<key>activityList</key>
