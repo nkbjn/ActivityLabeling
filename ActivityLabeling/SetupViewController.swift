@@ -28,6 +28,12 @@ class SetupViewController: FormViewController {
                     self.defaults.set(row.value, forKey: Config.host)
             }
             
+            <<< ButtonRow() {
+                $0.title = "接続テスト"
+                }.onCellSelection { _, _ in
+                    
+            }
+            
             +++ Section(header:"行動ラベル", footer:"")
             
             <<< ButtonRow(){
