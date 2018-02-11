@@ -49,9 +49,9 @@ class SetupViewController: FormViewController {
             
             <<< ButtonRow() {
                 $0.title = "ラベリング開始"
-                }.onCellSelection({_,_ in
+                }.onCellSelection { _, _ in
                     self.performSegue(withIdentifier: "LabelingViewControllerSegue", sender: nil)
-                })
+            }
         
     }
     
