@@ -19,6 +19,7 @@ class LabelTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "ラベル"
+        tableView.allowsSelection = false
         
         labels = realm.objects(Label.self)
         
@@ -45,26 +46,13 @@ class LabelTableViewController: UITableViewController {
         f.locale = Locale(identifier: "ja_JP")
         cell.textLabel?.text = f.string(from: label.time)
         
-        cell.detailTextLabel?.text = label.activities.reduce("activity:") { (result, activity) in
+        cell.detailTextLabel?.text = label.activities.reduce("") { (result, activity) in
             return result + " " + activity.name
         }
-        
-        cell.accessoryType = .disclosureIndicator
         
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let label = labels[indexPath.row]
-        selectedID = label.id
-        performSegue(withIdentifier: "", sender: nil)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "" {
-            
-        }
-    }
     
 }
 
