@@ -133,7 +133,9 @@ class LabelingViewController: FormViewController {
         var fields: [String: Int] = [:]
         for (name, value) in zip(activityList!, section.values()) {
             if let isOn = value as? Bool {
-                fields[name] = isOn ? 1:0
+                if isOn {
+                    fields[name] = 1
+                }
             }
         }
         let database = defaults.string(forKey: Config.database)!
