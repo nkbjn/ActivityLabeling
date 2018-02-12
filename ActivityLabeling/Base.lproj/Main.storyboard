@@ -183,7 +183,6 @@
         <!--Activity Select View Controller-->
         <scene sceneID="q9u-V8-xlh">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="f66-Wb-fY9" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="mzJ-Rz-KuS" customClass="ActivitySelectViewController" customModule="ActivityLabeling" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="USH-JO-8ns">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -192,6 +191,7 @@
                         <viewLayoutGuide key="safeArea" id="JVb-EO-oPJ"/>
                     </view>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f66-Wb-fY9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="825" y="-743"/>
         </scene>
