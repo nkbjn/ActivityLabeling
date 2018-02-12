@@ -23,7 +23,8 @@ class LabelingViewController: FormViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.barTintColor = UIColor.flatMintDark
+        self.navigationController?.navigationBar.barTintColor = UIColor.flatRed
+        self.title = "行動未選択"
         save()
         
         form
@@ -35,8 +36,20 @@ class LabelingViewController: FormViewController {
                         $0.title = activity
                         $0.value = false
                         }.onChange{row in
-                            row.cell.backgroundColor = row.value! ? UIColor.flatBlack : UIColor.white
-                            row.cell.textLabel?.textColor = row.value! ? UIColor.white : UIColor.black
+                            row.cell.backgroundColor = row.value! ? UIColor.flatWhiteDark : UIColor.white
+                            let section = self.form.sectionBy(tag: Config.activityList) as! MultivaluedSection
+                            for value in section.values() {
+                                if let isOn = value as? Bool {
+                                    if isOn {
+                                        self.navigationController?.navigationBar.barTintColor = UIColor.flatSkyBlueDark
+                                        self.title = "次の通信処理待ち"
+                                        return
+                                    }
+                                }
+                            }
+                            self.navigationController?.navigationBar.barTintColor = UIColor.flatRed
+                            self.title = "行動未選択"
+                            
                         }.cellSetup() {cell, row in
                             cell.switchControl.onTintColor = UIColor.flatGreen
                     }
@@ -135,8 +148,6 @@ class LabelingViewController: FormViewController {
             }
         }
         if fields.isEmpty {
-            self.navigationController?.navigationBar.barTintColor = UIColor.flatRed
-            self.title = "行動未選択"
             return
         }
         let database = defaults.string(forKey: Config.database)!
