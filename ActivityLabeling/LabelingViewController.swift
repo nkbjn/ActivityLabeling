@@ -24,8 +24,6 @@ class LabelingViewController: FormViewController {
         super.viewDidLoad()
         self.title = "ラベリング"
         
-        let period = defaults.integer(forKey: Config.period)
-        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(period), target: self, selector: #selector(LabelingViewController.labeling), userInfo: nil, repeats: true)
         
         save()
         
@@ -66,8 +64,26 @@ class LabelingViewController: FormViewController {
 
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        self.setTimer()
+        NotificationCenter.default.addObserver(self, selector: #selector(LabelingViewController.willEnterForeground), name: .UIApplicationWillEnterForeground, object: nil)
+    }
+    
+    @objc func willEnterForeground() {
+        self.setTimer()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
         self.timer?.invalidate()
+        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
+    }
+    
+    func setTimer() {
+        if (self.timer?.isValid)! {
+            return
+        }
+        let period = defaults.integer(forKey: Config.period)
+        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(period), target: self, selector: #selector(LabelingViewController.labeling), userInfo: nil, repeats: true)
     }
     
     func save() {
