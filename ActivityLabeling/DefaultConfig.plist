@@ -6,8 +6,6 @@
 	<string>test</string>
 	<key>measurement</key>
 	<string>label</string>
-	<key>field</key>
-	<string>activity</string>
 	<key>host</key>
 	<string>http://xxx.xxx.xxx.xxx:8086</string>
 	<key>activityList</key>
