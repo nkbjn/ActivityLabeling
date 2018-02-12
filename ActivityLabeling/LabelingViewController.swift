@@ -84,8 +84,8 @@ class LabelingViewController: FormViewController {
     
     func setTimer() {
         let period = defaults.integer(forKey: Config.period)
-        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(period), target: self, selector: #selector(LabelingViewController.labeling), userInfo: nil, repeats: true)
-        labeling()
+        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(period), target: self, selector: #selector(LabelingViewController.write), userInfo: nil, repeats: true)
+        write()
     }
     
     func save() {
@@ -105,10 +105,6 @@ class LabelingViewController: FormViewController {
         }
     }
     
-    @objc func labeling() {
-        add()
-        write()
-    }
     
     func add() {
         let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
@@ -128,7 +124,7 @@ class LabelingViewController: FormViewController {
         }
     }
     
-    func write() {
+    @objc func write() {
         let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
         var fields: [String: Int] = [:]
         for (name, value) in zip(activityList!, section.values()) {
@@ -137,6 +133,11 @@ class LabelingViewController: FormViewController {
                     fields[name] = 1
                 }
             }
+        }
+        if fields.isEmpty {
+            self.navigationController?.navigationBar.barTintColor = UIColor.flatRed
+            self.title = "行動未選択"
+            return
         }
         let database = defaults.string(forKey: Config.database)!
         let measurement = defaults.string(forKey: Config.measurement)!
@@ -147,6 +148,7 @@ class LabelingViewController: FormViewController {
         Session.send(request) { result in
             switch result {
             case .success:
+                self.add()
                 self.navigationController?.navigationBar.barTintColor = UIColor.flatMintDark
                 self.title = "通信状態良好"
             case .failure:
