@@ -6,8 +6,6 @@ target 'ActivityLabeling' do
   use_frameworks!
 
   # Pods for ActivityLabeling
-  pod 'RxSwift',    '~> 4.0'
-  pod 'RxCocoa',    '~> 4.0'
   pod 'Eureka'
   pod 'RealmSwift'
   pod 'APIKit', 	'~> 3.1'
