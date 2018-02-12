@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>database</key>
-	<string>test</string>
+	<string>app</string>
 	<key>measurement</key>
 	<string>label</string>
 	<key>host</key>
