@@ -20,7 +20,7 @@ class SetupViewController: FormViewController {
         self.title = "ラベリング"
         
         form
-            +++ Section()
+            +++ Section("ラベルデータを保存するデータベースの設定")
             
             <<< TextRow() {
                 $0.tag = Config.host
@@ -36,14 +36,14 @@ class SetupViewController: FormViewController {
                     self.ping()
                 }
             
-            +++ Section()
+            +++ Section("ラベリングする行動の設定")
             
             <<< ButtonRow(){
                 $0.title = "対象行動の確認/変更"
                 $0.presentationMode = .segueName(segueName: "ActivitySelectViewControllerControllerSegue", onDismiss: nil)
             }
             
-            +++ Section()
+            +++ Section("ラベリングの設定")
             
             <<< IntRow() {
                 $0.tag = Config.period
