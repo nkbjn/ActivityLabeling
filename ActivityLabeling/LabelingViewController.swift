@@ -9,6 +9,7 @@
 import UIKit
 import Eureka
 import RealmSwift
+import APIKit
 
 class LabelingViewController: FormViewController {
     
@@ -24,7 +25,7 @@ class LabelingViewController: FormViewController {
         self.title = "ラベリング"
         
         let period = defaults.integer(forKey: Config.period)
-        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(period), target: self, selector: #selector(LabelingViewController.save), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(period), target: self, selector: #selector(LabelingViewController.labeling), userInfo: nil, repeats: true)
         
         
         form
@@ -68,7 +69,12 @@ class LabelingViewController: FormViewController {
         self.timer?.invalidate()
     }
     
-    @objc func save() {
+    @objc func labeling() {
+        write()
+        save()
+    }
+    
+    func save() {
         let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
         let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: id)
         let label = Label()
@@ -86,16 +92,26 @@ class LabelingViewController: FormViewController {
         }
     }
     
-    @objc func writeRequest() {
+    func write() {
         let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
+        var fields: [String: Int] = [:]
         for (name, value) in zip(activityList!, section.values()) {
             if let isOn = value as? Bool {
-                if isOn {
-                    let database = defaults.string(forKey: Config.database)
-                    let measurement = defaults.string(forKey: Config.measurement)
-                    let field = defaults.string(forKey: Config.field)
-                    let host = defaults.string(forKey: Config.host)
-                }
+                fields[name] = isOn ? 1:0
+            }
+        }
+        let database = defaults.string(forKey: Config.database)!
+        let measurement = defaults.string(forKey: Config.measurement)!
+        let host = defaults.string(forKey: Config.host)!
+        let influxdb = InfluxDBClient(host: URL(string: host)!, databaseName: database)
+        let request = WriteRequest(influxdb: influxdb, measurement: measurement, tags: [:], fields: fields)
+        
+        Session.send(request) { result in
+            switch result {
+            case .success:
+                break
+            case .failure:
+                break
             }
         }
     }

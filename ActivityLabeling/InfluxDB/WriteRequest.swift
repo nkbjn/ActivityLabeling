@@ -47,11 +47,7 @@ class WriteRequest: InfluxDBRequest {
         var fieldsStr: String {
             return request.fields
                 .map { key, value in
-                    let escaped_value =
-                        value
-                            .replacingOccurrences(of: "\"", with: "\\\"")
-                            .replacingOccurrences(of: ",", with: "\\,")
-                    return "\(key)=\"\(escaped_value)\""
+                    return "\(key)=\(value)"
                 }
                 .joined(separator: ",")
         }
