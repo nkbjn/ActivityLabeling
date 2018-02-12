@@ -70,6 +70,9 @@ class LabelingViewController: FormViewController {
     }
     
     @objc func willEnterForeground() {
+        if (self.timer?.isValid)! {
+            return
+        }
         self.setTimer()
     }
     
@@ -79,9 +82,6 @@ class LabelingViewController: FormViewController {
     }
     
     func setTimer() {
-        if (self.timer?.isValid)! {
-            return
-        }
         let period = defaults.integer(forKey: Config.period)
         self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(period), target: self, selector: #selector(LabelingViewController.labeling), userInfo: nil, repeats: true)
     }
