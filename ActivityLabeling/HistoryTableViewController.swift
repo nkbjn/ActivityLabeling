@@ -23,7 +23,7 @@ class HistoryTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        labelings = realm.objects(Labeling.self)
+        labelings = realm.objects(Labeling.self).sorted(byKeyPath: "startTime", ascending: false)
         tableView.reloadData()
     }
 
