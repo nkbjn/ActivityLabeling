@@ -11,9 +11,23 @@
 	<key>activityList</key>
 	<array>
 		<string>cooking</string>
-		<string>watching_tv</string>
-		<string>sleeping</string>
+		<string>eating</string>
+		<string>cleaning_the_room</string>
 		<string>bathing</string>
+		<string>sleeping</string>
+		<string>reading_a_book</string>
+		<string>washing_my_face</string>
+		<string>washing_the_dishes</string>
+		<string>watching_the_tv</string>
+		<string>cleaning_the_bathroom</string>
+		<string>working_on_a_pc</string>
+		<string>dressing</string>
+		<string>going_outside</string>
+		<string>doing_laundry</string>
+		<string>playing_a_video_game</string>
+		<string>playing_a_mobile_phone</string>
+		<string>brushing_my_teeth </string>
+		<string>putting_on_makeup</string>
 	</array>
 	<key>period</key>
 	<integer>10</integer>
