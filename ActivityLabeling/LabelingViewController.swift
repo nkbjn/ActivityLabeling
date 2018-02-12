@@ -10,6 +10,7 @@ import UIKit
 import Eureka
 import RealmSwift
 import APIKit
+import ChameleonFramework
 
 class LabelingViewController: FormViewController {
     
@@ -22,7 +23,7 @@ class LabelingViewController: FormViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        self.navigationController?.navigationBar.barTintColor = UIColor.flatMintDark
         save()
         
         form
@@ -34,8 +35,10 @@ class LabelingViewController: FormViewController {
                         $0.title = activity
                         $0.value = false
                         }.onChange{row in
-                            row.cell.backgroundColor = row.value! ? UIColor.darkGray : UIColor.white
+                            row.cell.backgroundColor = row.value! ? UIColor.flatBlack : UIColor.white
                             row.cell.textLabel?.textColor = row.value! ? UIColor.white : UIColor.black
+                        }.cellSetup() {cell, row in
+                            cell.switchControl.onTintColor = UIColor.flatGreen
                     }
                 }
                 
@@ -58,7 +61,7 @@ class LabelingViewController: FormViewController {
                     alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
                     
                     self.present(alert, animated: true)
-            }
+                    }
 
     }
     
@@ -82,6 +85,7 @@ class LabelingViewController: FormViewController {
     func setTimer() {
         let period = defaults.integer(forKey: Config.period)
         self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(period), target: self, selector: #selector(LabelingViewController.labeling), userInfo: nil, repeats: true)
+        labeling()
     }
     
     func save() {
@@ -141,10 +145,10 @@ class LabelingViewController: FormViewController {
         Session.send(request) { result in
             switch result {
             case .success:
-                self.navigationController?.navigationBar.barTintColor = UIColor.green
+                self.navigationController?.navigationBar.barTintColor = UIColor.flatMintDark
                 self.title = "通信状態良好"
             case .failure:
-                self.navigationController?.navigationBar.barTintColor = UIColor.red
+                self.navigationController?.navigationBar.barTintColor = UIColor.flatRed
                 self.title = "通信失敗"
             }
         }

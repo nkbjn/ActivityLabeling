@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ChameleonFramework
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         DefaultConfig().setup()
+        Chameleon.setGlobalThemeUsingPrimaryColor(UIColor.flatBlack, withSecondaryColor: UIColor.white, andContentStyle: .light)
         
         return true
     }

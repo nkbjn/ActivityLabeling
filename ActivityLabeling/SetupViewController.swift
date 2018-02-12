@@ -34,7 +34,7 @@ class SetupViewController: FormViewController {
                 $0.title = "接続テスト"
                 }.onCellSelection { _, _ in
                     self.ping()
-            }
+                }
             
             +++ Section()
             
@@ -59,8 +59,7 @@ class SetupViewController: FormViewController {
                 $0.title = "ラベリング開始"
                 }.onCellSelection { _, _ in
                     self.start()
-                    
-            }
+                }
         
     }
     
