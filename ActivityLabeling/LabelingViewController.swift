@@ -22,9 +22,7 @@ class LabelingViewController: FormViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "ラベリング"
-        
-        
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         save()
         
         form
@@ -143,9 +141,11 @@ class LabelingViewController: FormViewController {
         Session.send(request) { result in
             switch result {
             case .success:
-                break
+                self.navigationController?.navigationBar.barTintColor = UIColor.green
+                self.title = "通信状態良好"
             case .failure:
-                break
+                self.navigationController?.navigationBar.barTintColor = UIColor.red
+                self.title = "通信失敗"
             }
         }
     }
