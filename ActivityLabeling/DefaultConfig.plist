@@ -9,7 +9,7 @@
 	<key>field</key>
 	<string>activity</string>
 	<key>host</key>
-	<string>ubi-t08.naist.jp</string>
+	<string>http://xxx.xxx.xxx.xxx:8086</string>
 	<key>activityList</key>
 	<array>
 		<string>cooking</string>
