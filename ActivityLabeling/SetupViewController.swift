@@ -34,31 +34,7 @@ class SetupViewController: FormViewController {
             <<< ButtonRow() {
                 $0.title = "接続テスト"
                 }.onCellSelection { _, _ in
-                    let database = self.defaults.string(forKey: Config.database)
-                    let host = self.defaults.string(forKey: Config.host)
-                    let influxdb = InfluxDBClient(host: URL(string: host!)! ,databaseName: database!)
-                    let request = PingRequest(influxdb: influxdb)
-                    Session.send(request) { result in
-                        switch result {
-                        case .success(let response):
-                            print(response)
-                        case .failure(let error):
-                            print(printError(error))
-                        }
-                        
-                    }
-                    func printError(_ error: SessionTaskError) {
-                        switch error {
-                        case .responseError(let error as InfluxDBError):
-                            print(error.message) // Prints message from InfluxDB API
-                            
-                        case .connectionError(let error):
-                            print("Connection error: \(error)")
-                            
-                        default:
-                            print("System error :bow:")
-                        }
-                    }
+                    self.ping()
             }
             
             +++ Section()
@@ -87,6 +63,31 @@ class SetupViewController: FormViewController {
                     
             }
         
+    }
+    
+    func ping() {
+        let database = self.defaults.string(forKey: Config.database)
+        let host = self.defaults.string(forKey: Config.host)
+        let influxdb = InfluxDBClient(host: URL(string: host!)! ,databaseName: database!)
+        let request = PingRequest(influxdb: influxdb)
+        
+        Session.send(request) { result in
+            switch result {
+            case .success:
+                let alert = UIAlertController(title: "通信成功",
+                                              message: "正常に通信ができることを確認しました",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            case .failure(let error):
+                let alert = UIAlertController(title: "通信エラー",
+                                              message: error.localizedDescription,
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+                
+            }
+        }
     }
     
     func start() {
