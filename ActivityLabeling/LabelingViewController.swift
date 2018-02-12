@@ -29,7 +29,7 @@ class LabelingViewController: FormViewController {
         
         
         form
-            +++ MultivaluedSection(multivaluedOptions:[], footer: "") {
+            +++ MultivaluedSection(multivaluedOptions:[]) {
                 $0.tag = Config.activityList
         
                 for activity in activityList! {
@@ -44,7 +44,7 @@ class LabelingViewController: FormViewController {
                 
             }
         
-            +++ Section(header:"", footer:"")
+            +++ Section()
             
                 <<< ButtonRow() {
                     $0.title = "ラベリング終了"
