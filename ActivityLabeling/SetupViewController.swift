@@ -14,7 +14,6 @@ import APIKit
 class SetupViewController: FormViewController {
 
     let defaults = UserDefaults.standard
-    var id: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,31 +90,20 @@ class SetupViewController: FormViewController {
     }
     
     func start() {
-        let labeling = Labeling()
-        self.id = labeling.id
-        labeling.host = self.defaults.string(forKey: Config.host)!
-        let activityList = self.defaults.stringArray(forKey: Config.activityList)
-        for name in activityList! {
-            let activity = Activity()
-            activity.name = name
-            labeling.activityList.append(activity)
-        }
-        labeling.period = self.defaults.integer(forKey: Config.period)
+        let host = defaults.string(forKey: Config.host)!
+        let activityList = defaults.stringArray(forKey: Config.activityList)!
+        let period = defaults.integer(forKey: Config.period)
         
-        var message = "接続先：\(labeling.host) \n\n"
+        var message = "接続先：\(host) \n\n"
         message = message + "対象行動\n"
-        for activity in labeling.activityList {
-            message = message + "・\(activity.name)\n"
+        for activity in activityList {
+            message = message + "・\(activity)\n"
         }
-        message = message + "\nラベリング周期：\(labeling.period) 秒"
+        message = message + "\nラベリング周期：\(period) 秒"
         
         let alert = UIAlertController(title: "ラベリング開始", message: message, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "開始", style: .default, handler: { action in
-            let realm = try! Realm()
-            try! realm.write {
-                realm.add(labeling)
-            }
             self.performSegue(withIdentifier: "LabelingViewControllerSegue", sender: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -144,13 +132,6 @@ class SetupViewController: FormViewController {
         let period = form.rowBy(tag: Config.period) as! IntRow
         period.value = defaults.integer(forKey: Config.period)
         period.reload()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "LabelingViewControllerSegue" {
-            let vc = segue.destination as! LabelingViewController
-            vc.id = id
-        }
     }
     
 }

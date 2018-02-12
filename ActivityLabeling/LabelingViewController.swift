@@ -27,6 +27,7 @@ class LabelingViewController: FormViewController {
         let period = defaults.integer(forKey: Config.period)
         self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(period), target: self, selector: #selector(LabelingViewController.labeling), userInfo: nil, repeats: true)
         
+        save()
         
         form
             +++ MultivaluedSection(multivaluedOptions:[]) {
@@ -69,14 +70,31 @@ class LabelingViewController: FormViewController {
         self.timer?.invalidate()
     }
     
-    @objc func labeling() {
-        write()
-        save()
+    func save() {
+        let labeling = Labeling()
+        self.id = labeling.id
+        labeling.host = self.defaults.string(forKey: Config.host)!
+        let activityList = self.defaults.stringArray(forKey: Config.activityList)
+        for name in activityList! {
+            let activity = Activity()
+            activity.name = name
+            labeling.activityList.append(activity)
+        }
+        labeling.period = self.defaults.integer(forKey: Config.period)
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(labeling)
+        }
     }
     
-    func save() {
+    @objc func labeling() {
+        add()
+        write()
+    }
+    
+    func add() {
         let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
-        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: id)
+        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: self.id)
         let label = Label()
         for (name, value) in zip(activityList!, section.values()) {
             if let isOn = value as? Bool {
