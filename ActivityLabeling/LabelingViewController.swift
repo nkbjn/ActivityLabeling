@@ -134,7 +134,7 @@ class LabelingViewController: FormViewController {
     ///
     /// - Parameters:
     ///   - activity: 追加する行動
-    ///   - on: 追加する行動の状態
+    ///   - status: 追加する行動の状態
     func labelAdd(activity:String, status:Bool) {
         // ラベリングデータをIDから検索する
         let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: self.labelingID)
