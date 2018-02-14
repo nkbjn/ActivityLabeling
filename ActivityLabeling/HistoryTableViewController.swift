@@ -67,9 +67,6 @@ class HistoryTableViewController: UITableViewController {
         let labeling = labelings[indexPath.row]
         selectedID = labeling.id
         
-        // 選択した後は選択を解除する
-        tableView.deselectRow(at: indexPath, animated: true)
-        
         // LabelTableViewControllerに遷移
         performSegue(withIdentifier: "LabelTableViewControllerSegue", sender: nil)
     }
