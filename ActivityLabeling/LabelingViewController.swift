@@ -16,7 +16,7 @@ import ChameleonFramework
 /// ラベリングをするViewController
 class LabelingViewController: FormViewController {
     
-    var id: String?             // ラベリングを保存するときのID
+    var labelingID: String? // ラベリングを保存するときのID
     let realm = try! Realm()
     let defaults = UserDefaults.standard
     let activityList = UserDefaults.standard.stringArray(forKey: Config.activityList)
@@ -29,33 +29,37 @@ class LabelingViewController: FormViewController {
         self.navigationController?.navigationBar.barTintColor = UIColor.flatRed
         self.title = "行動未選択"
         
-        // ラベリング情報を保存
-        save()
+        // ラベリング情報を作成
+        self.labelingCreate()
         
         form
-            +++ MultivaluedSection(multivaluedOptions:[]) {
+            +++ MultivaluedSection() {
+                
                 // 選択状態を取得するためにタグをつけておく
                 $0.tag = Config.activityList
         
                 // 行動の選択ボタンを作成する
                 for activity in activityList! {
+                    
                     $0 <<< SwitchRow {
                         $0.tag = activity
                         $0.title = activity
                         $0.value = false
+                        
                     }.onChange{row in
                         
                         // 選択状態をはっきりさせるために背景色を変える
                         row.cell.backgroundColor = row.value! ? UIColor.flatWhiteDark : UIColor.white
                         
                         // 選択状態をデータベースに送信する
-                        self.write(tag: row.tag!)
+                        self.labelSend(tag: row.tag!)
                         
                     }.cellSetup() {cell, row in
-                        
                         // Chameleonで自動で変えられる色が合わないので変更
                         cell.switchControl.onTintColor = UIColor.flatGreen
+                        
                     }
+                    
                 }
                 
             }
@@ -64,14 +68,13 @@ class LabelingViewController: FormViewController {
             
                 <<< ButtonRow() {
                     $0.title = "ラベリング終了"
-                }.onCellSelection { _, _ in
                     
+                }.onCellSelection { _, _ in
                     // 行動を選択している状態で終了されると困るのでチェック
                     if self.selectedCheck() {
                         let alert = UIAlertController(title: "エラー",
                                                       message: "全ての行動を終了させてください",
                                                       preferredStyle: .alert)
-                        
                         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(alert, animated: true)
                         return
@@ -81,17 +84,15 @@ class LabelingViewController: FormViewController {
                     let alert = UIAlertController(title: "ラベリング終了",
                                                   message: "本当に終了してよろしいですか？",
                                                   preferredStyle: .alert)
-                    
                     alert.addAction(UIAlertAction(title: "終了",
                                                   style: .default,
                                                   handler: { action in
                         self.dismiss(animated: true, completion: nil)
                     }))
                     alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                    
                     self.present(alert, animated: true)
+                    
                 }
-
     }
     
     
@@ -99,7 +100,7 @@ class LabelingViewController: FormViewController {
     ///
     /// - Returns: 行動が一つでも選択されているかどうか
     func selectedCheck() -> Bool {
-        let section = self.form.sectionBy(tag: Config.activityList) as! MultivaluedSection
+        let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
         
         for value in section.values() {
             if let isOn = value as? Bool {
@@ -108,16 +109,17 @@ class LabelingViewController: FormViewController {
                 }
             }
         }
+        
         return false
     }
     
     
-    /// Realmにラベルデータを保存する関数
-    func save() {
+    /// Realmにラベリングデータを作成する関数
+    func labelingCreate() {
         let labeling = Labeling()
         
         // 行動選択時にラベルデータを追加するために変数に代入しておく
-        self.id = labeling.id
+        self.labelingID = labeling.id
         
         labeling.host = self.defaults.string(forKey: Config.host)!
         
@@ -133,13 +135,13 @@ class LabelingViewController: FormViewController {
     /// - Parameters:
     ///   - activity: 追加する行動
     ///   - on: 追加する行動の状態
-    func add(activity:String, on:Bool) {
+    func labelAdd(activity:String, status:Bool) {
         // ラベリングデータをIDから検索する
-        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: self.id)
+        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: self.labelingID)
         
         let label = Label()
         label.activity = activity
-        label.on = on
+        label.status = status
         
         try! realm.write {
             labeling?.labels.append(label)
@@ -150,18 +152,18 @@ class LabelingViewController: FormViewController {
     /// DBサーバにラベルデータを送信する
     ///
     /// - Parameter tag: 選択した行動スイッチのタグ
-    func write(tag:String) {
+    func labelSend(tag:String) {
         let row = form.rowBy(tag: tag) as! SwitchRow
         
         // 行動スイッチのタイトルが行動名
         let activity = row.title!
         
         // 行動スイッチの状態
-        let on = row.value!
+        let status = row.value!
         
         var fields: [String: Any] = [:]
         fields["activity"] = activity
-        fields["on"] = on ? 1:0
+        fields["status"] = status ? 1:0
         
         let database = defaults.string(forKey: Config.database)!
         let measurement = defaults.string(forKey: Config.measurement)!
@@ -173,7 +175,7 @@ class LabelingViewController: FormViewController {
             switch result {
             case .success:
                 // 通信成功したらRealmにも保存する
-                self.add(activity: activity, on: on)
+                self.labelAdd(activity: activity, status: status)
                 
                 // 通信成功したらステータスを成功に変える
                 self.navigationController?.navigationBar.barTintColor = UIColor.flatMintDark
@@ -187,7 +189,7 @@ class LabelingViewController: FormViewController {
                 
             case .failure:
                 // 通信に失敗したら行動スイッチを元に戻す
-                row.value = on ? false:true
+                row.value = status ? false:true
                 
                 // 通信に失敗したらステータスを通信失敗に変える
                 self.navigationController?.navigationBar.barTintColor = UIColor.flatRed

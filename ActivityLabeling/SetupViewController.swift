@@ -17,6 +17,7 @@ class SetupViewController: FormViewController {
 
     let defaults = UserDefaults.standard
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "ラベリング"
@@ -28,34 +29,38 @@ class SetupViewController: FormViewController {
                 $0.tag = Config.host
                 $0.title = "接続先"
                 $0.value = defaults.string(forKey: Config.host)
-                }.onChange { row in
-                    // 内容が変更されたらUserdefaultsに書き込む
-                    self.defaults.set(row.value, forKey: Config.host)
+                
+            }.onChange {row in
+                // 内容が変更されたらUserdefaultsに書き込む
+                self.defaults.set(row.value, forKey: Config.host)
             }
             
             <<< ButtonRow() {
                 $0.title = "接続テスト"
-                }.onCellSelection { _, _ in
-                    self.ping()
-                }
+                
+            }.onCellSelection {_, _ in
+                self.ping()
+            }
+            
             
             +++ Section("ラベリングする行動の設定")
             
-            <<< ButtonRow(){
+            <<< ButtonRow() {
                 $0.title = "対象行動の確認/変更"
                 $0.presentationMode = .segueName(segueName: "ActivitySelectViewControllerControllerSegue", onDismiss: nil)
             }
+            
             
             +++ Section()
             
             <<< ButtonRow() {
                 $0.title = "ラベリング開始"
-                }.onCellSelection { _, _ in
-                    self.start()
-                }
+                
+            }.onCellSelection {_, _ in
+                self.labelingStart()
+            }
         
     }
-    
     
     
     /// DBサーバへの接続テストを行う
@@ -73,6 +78,7 @@ class SetupViewController: FormViewController {
                                               preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alert, animated: true)
+                
             case .failure(let error):
                 let alert = UIAlertController(title: "通信エラー",
                                               message: error.localizedDescription,
@@ -86,7 +92,7 @@ class SetupViewController: FormViewController {
     
     
     // ラベリングを開始する
-    func start() {
+    func labelingStart() {
         let host = defaults.string(forKey: Config.host)!
         let activityList = defaults.stringArray(forKey: Config.activityList)!
         
@@ -97,12 +103,11 @@ class SetupViewController: FormViewController {
         }
         
         let alert = UIAlertController(title: "ラベリング開始", message: message, preferredStyle: .alert)
-        
         alert.addAction(UIAlertAction(title: "開始", style: .default, handler: { action in
+            // ラベリング画面に遷移
             self.performSegue(withIdentifier: "LabelingViewControllerSegue", sender: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
         self.present(alert, animated: true)
     }
     
@@ -110,24 +115,19 @@ class SetupViewController: FormViewController {
     
     @IBAction func reset(_ sender: Any) {
         let alert = UIAlertController(title: "設定の初期化", message: "本当に初期化してよろしいですか？", preferredStyle: .alert)
-        
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-            self.resetConfig()
+            
+            // 初期設定に戻す
+            DefaultConfig().reset()
+            
+            // 入力エリアの表示も更新する
+            let host = self.form.rowBy(tag: Config.host) as! TextRow
+            host.value = self.defaults.string(forKey: Config.host)
+            host.reload()
+            
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
         self.present(alert, animated: true)
-    }
-    
-    
-    /// 設定を初期状態に戻す
-    func resetConfig() {
-        DefaultConfig().reset()
-        
-        // 入力エリアの表示も更新する
-        let host = form.rowBy(tag: Config.host) as! TextRow
-        host.value = defaults.string(forKey: Config.host)
-        host.reload()
     }
     
 }
@@ -145,19 +145,24 @@ class ActivitySelectViewController: FormViewController {
         let activityList = defaults.stringArray(forKey: Config.activityList)
         
         form +++
-            MultivaluedSection(multivaluedOptions:[.Insert, .Delete], footer: "") {
-                
+            MultivaluedSection(multivaluedOptions:[.Insert, .Delete]) {
+                // データ保存用にタグをつけておく
                 $0.tag = Config.activityList
+                
                 $0.addButtonProvider = { section in
                     return ButtonRow(){
                         $0.title = "行動ラベルを追加"
-                        }.cellUpdate { cell, row in
-                            cell.textLabel?.textAlignment = .left
+                        
+                    }.cellUpdate { cell, row in
+                        cell.textLabel?.textAlignment = .left
+                        
                     }
                 }
+                
                 $0.multivaluedRowToInsertAt = { index in
                     return TextRow() {
                         $0.placeholder = "行動名"
+                        
                     }
                 }
                 
@@ -166,9 +171,9 @@ class ActivitySelectViewController: FormViewController {
                     $0 <<< TextRow {
                         $0.placeholder = "行動名"
                         $0.value = activity
+                        
                     }
                 }
-                
         }
         
     }
@@ -178,5 +183,5 @@ class ActivitySelectViewController: FormViewController {
         let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
         defaults.set(section.values(), forKey: Config.activityList)
     }
-    
+
 }

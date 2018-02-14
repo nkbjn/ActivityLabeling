@@ -15,7 +15,7 @@ class LabelTableViewController: UITableViewController {
 
     lazy var realm = try! Realm()
     var labels: List<Label>!
-    var selectedID: String?
+    var labelingID: String?
     
     
     override func viewDidLoad() {
@@ -23,9 +23,8 @@ class LabelTableViewController: UITableViewController {
         self.title = "ラベル"
         tableView.allowsSelection = false
         
-        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: selectedID)
+        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: labelingID)
         labels = labeling?.labels
-        
     }
     
     // MARK: - Table view data source
@@ -49,11 +48,10 @@ class LabelTableViewController: UITableViewController {
         f.locale = Locale(identifier: "ja_JP")
         cell.textLabel?.text = f.string(from: label.time)
         
-        cell.detailTextLabel?.text = "\(label.activity):\(label.on ? "on":"off")"
+        cell.detailTextLabel?.text = "\(label.activity):\(label.status ? "on":"off")"
         
         return cell
     }
-    
     
 }
 

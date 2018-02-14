@@ -15,13 +15,12 @@ class HistoryTableViewController: UITableViewController {
     
     let realm = try! Realm()
     var labelings: Results<Labeling>!   // ラベリング履歴
-    var selectedID: String?             // 選択したラベリング
+    var selectedID: String?             // 選択したラベリングID
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "履歴"
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,7 +78,7 @@ class HistoryTableViewController: UITableViewController {
         if segue.identifier == "LabelTableViewControllerSegue" {
             // どの履歴をタップしたのかを保存する
             let vc = segue.destination as! LabelTableViewController
-            vc.selectedID = selectedID
+            vc.labelingID = selectedID
         }
     }
 
