@@ -9,6 +9,8 @@
 import UIKit
 import RealmSwift
 
+
+/// 過去のラベリングの詳細を表示するTableViewController
 class LabelTableViewController: UITableViewController {
 
     lazy var realm = try! Realm()

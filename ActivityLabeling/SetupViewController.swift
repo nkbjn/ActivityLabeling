@@ -11,6 +11,8 @@ import Eureka
 import RealmSwift
 import APIKit
 
+
+/// ラベリングの設定を行うViewController
 class SetupViewController: FormViewController {
 
     let defaults = UserDefaults.standard
@@ -27,6 +29,7 @@ class SetupViewController: FormViewController {
                 $0.title = "接続先"
                 $0.value = defaults.string(forKey: Config.host)
                 }.onChange { row in
+                    // 内容が変更されたらUserdefaultsに書き込む
                     self.defaults.set(row.value, forKey: Config.host)
             }
             
@@ -53,6 +56,9 @@ class SetupViewController: FormViewController {
         
     }
     
+    
+    
+    /// DBサーバへの接続テストを行う
     func ping() {
         let database = self.defaults.string(forKey: Config.database)
         let host = self.defaults.string(forKey: Config.host)
@@ -78,6 +84,8 @@ class SetupViewController: FormViewController {
         }
     }
     
+    
+    // ラベリングを開始する
     func start() {
         let host = defaults.string(forKey: Config.host)!
         let activityList = defaults.stringArray(forKey: Config.activityList)!
@@ -98,6 +106,8 @@ class SetupViewController: FormViewController {
         self.present(alert, animated: true)
     }
     
+    
+    
     @IBAction func reset(_ sender: Any) {
         let alert = UIAlertController(title: "設定の初期化", message: "本当に初期化してよろしいですか？", preferredStyle: .alert)
         
@@ -109,9 +119,12 @@ class SetupViewController: FormViewController {
         self.present(alert, animated: true)
     }
     
+    
+    /// 設定を初期状態に戻す
     func resetConfig() {
         DefaultConfig().reset()
         
+        // 入力エリアの表示も更新する
         let host = form.rowBy(tag: Config.host) as! TextRow
         host.value = defaults.string(forKey: Config.host)
         host.reload()
@@ -120,6 +133,7 @@ class SetupViewController: FormViewController {
 }
 
 
+/// ラベリング行動設定画面
 class ActivitySelectViewController: FormViewController {
     
     let defaults = UserDefaults.standard
@@ -147,6 +161,7 @@ class ActivitySelectViewController: FormViewController {
                     }
                 }
                 
+                // すでに保存している行動を表示する
                 for activity in activityList! {
                     $0 <<< TextRow {
                         $0.placeholder = "行動名"
@@ -159,6 +174,7 @@ class ActivitySelectViewController: FormViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        // 画面が切り替わったら保存する
         let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
         defaults.set(section.values(), forKey: Config.activityList)
     }

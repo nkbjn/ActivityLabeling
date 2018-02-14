@@ -18,7 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        // 初期設定を読み込む
         DefaultConfig().setup()
+        
+        // テーマカラーを設定する
         Chameleon.setGlobalThemeUsingPrimaryColor(UIColor.flatBlack, withSecondaryColor: UIColor.white, andContentStyle: .light)
         
         return true

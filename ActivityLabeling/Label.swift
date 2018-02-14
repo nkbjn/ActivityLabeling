@@ -9,22 +9,26 @@
 import UIKit
 import RealmSwift
 
+
+/// ラベリングのモデル
 class Labeling: Object {
-    @objc dynamic var id = NSUUID().uuidString
-    @objc dynamic var host = ""
-    @objc dynamic var startTime = Date()
-    let labels = List<Label>()
+    @objc dynamic var id = NSUUID().uuidString  // ユニークID
+    @objc dynamic var host = ""                 // データベースに接続するホスト名
+    @objc dynamic var startTime = Date()        // ラベリング開始時間
+    let labels = List<Label>()                  // ラベル群
     
     override static func primaryKey() -> String? {
         return "id"
     }
 }
 
+
+/// ラベルのモデル
 class Label: Object {
-    @objc dynamic var id = NSUUID().uuidString
-    @objc dynamic var time = Date()
-    @objc dynamic var activity = ""
-    @objc dynamic var on = true
+    @objc dynamic var id = NSUUID().uuidString  // ユニークID
+    @objc dynamic var time = Date()             // ラベリング時の時刻
+    @objc dynamic var activity = ""             // 変更行動
+    @objc dynamic var on = true                 // 変更後の状態
     
     override static func primaryKey() -> String? {
         return "id"

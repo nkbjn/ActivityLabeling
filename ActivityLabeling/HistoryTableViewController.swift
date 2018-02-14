@@ -9,11 +9,13 @@
 import UIKit
 import RealmSwift
 
+
+/// ラベリングの履歴を表示するTableViewController
 class HistoryTableViewController: UITableViewController {
     
     let realm = try! Realm()
-    var labelings: Results<Labeling>!
-    var selectedID: String?
+    var labelings: Results<Labeling>!   // ラベリング履歴
+    var selectedID: String?             // 選択したラベリング
 
     
     override func viewDidLoad() {
@@ -23,7 +25,10 @@ class HistoryTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        // ラベリング時間で降順にソートする
         labelings = realm.objects(Labeling.self).sorted(byKeyPath: "startTime", ascending: false)
+        
+        // タブ切り替え時に再読み込みされるようにする
         tableView.reloadData()
     }
 
@@ -42,28 +47,37 @@ class HistoryTableViewController: UITableViewController {
         
         let labeling = labelings[indexPath.row]
         
+        // メインはラベリング開始時間
         let f = DateFormatter()
         f.dateStyle = .medium
         f.timeStyle = .medium
         f.locale = Locale(identifier: "ja_JP")
         cell.textLabel?.text = "\(f.string(from: labeling.startTime)) 〜"
         
+        // 詳細は接続ホスト
         cell.detailTextLabel?.text = "\(labeling.host)"
         
+        // タッチできることをわかりやすくする
         cell.accessoryType = .disclosureIndicator
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 選択したラベリングのIDを取得する
         let labeling = labelings[indexPath.row]
         selectedID = labeling.id
+        
+        // 選択した後は選択を解除する
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        // LabelTableViewControllerに遷移
         performSegue(withIdentifier: "LabelTableViewControllerSegue", sender: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "LabelTableViewControllerSegue" {
+            // どの履歴をタップしたのかを保存する
             let vc = segue.destination as! LabelTableViewController
             vc.selectedID = selectedID
         }

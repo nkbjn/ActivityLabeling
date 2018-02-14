@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+/// 設定をUserDefaultに保存するときのKey
 struct Config {
     static let database = "database"
     static let measurement = "measurement"
