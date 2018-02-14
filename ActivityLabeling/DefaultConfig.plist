@@ -29,7 +29,5 @@
 		<string>brushing_my_teeth</string>
 		<string>putting_on_makeup</string>
 	</array>
-	<key>period</key>
-	<integer>10</integer>
 </dict>
 </plist>

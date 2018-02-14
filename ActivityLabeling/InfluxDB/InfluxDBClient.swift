@@ -11,7 +11,7 @@ import APIKit
 
 open class InfluxDBClient {
     public typealias Tags = [String: String]
-    public typealias Fields = [String: Int]
+    public typealias Fields = [String: Any]
     
     public let host: URL
     public let database: String

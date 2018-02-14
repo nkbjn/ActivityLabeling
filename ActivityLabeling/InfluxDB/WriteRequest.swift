@@ -47,7 +47,14 @@ class WriteRequest: InfluxDBRequest {
         var fieldsStr: String {
             return request.fields
                 .map { key, value in
-                    return "\(key)=\(value)"
+                    switch(value) {
+                        case let string as String:
+                            return "\(key)=\"\(string)\""
+                        
+                        default:
+                            return "\(key)=\(value)"
+                    }
+                    
                 }
                 .joined(separator: ",")
         }

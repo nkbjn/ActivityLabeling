@@ -43,16 +43,6 @@ class SetupViewController: FormViewController {
                 $0.presentationMode = .segueName(segueName: "ActivitySelectViewControllerControllerSegue", onDismiss: nil)
             }
             
-            +++ Section("ラベリングの設定")
-            
-            <<< IntRow() {
-                $0.tag = Config.period
-                $0.title = "ラベリング周期(秒)"
-                $0.value = defaults.integer(forKey: Config.period)
-                }.onChange { row in
-                    self.defaults.set(row.value, forKey: Config.period)
-            }
-            
             +++ Section()
             
             <<< ButtonRow() {
@@ -91,14 +81,12 @@ class SetupViewController: FormViewController {
     func start() {
         let host = defaults.string(forKey: Config.host)!
         let activityList = defaults.stringArray(forKey: Config.activityList)!
-        let period = defaults.integer(forKey: Config.period)
         
         var message = "接続先：\(host) \n\n"
         message = message + "対象行動\n"
         for activity in activityList {
             message = message + "・\(activity)\n"
         }
-        message = message + "\nラベリング周期：\(period) 秒"
         
         let alert = UIAlertController(title: "ラベリング開始", message: message, preferredStyle: .alert)
         
@@ -127,10 +115,6 @@ class SetupViewController: FormViewController {
         let host = form.rowBy(tag: Config.host) as! TextRow
         host.value = defaults.string(forKey: Config.host)
         host.reload()
-        
-        let period = form.rowBy(tag: Config.period) as! IntRow
-        period.value = defaults.integer(forKey: Config.period)
-        period.reload()
     }
     
 }

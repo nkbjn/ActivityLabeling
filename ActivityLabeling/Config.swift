@@ -13,5 +13,4 @@ struct Config {
     static let measurement = "measurement"
     static let host = "host"
     static let activityList = "activityList"
-    static let period = "period"
 }

@@ -15,7 +15,6 @@ import ChameleonFramework
 class LabelingViewController: FormViewController {
     
     var id: String?
-    var timer: Timer?
     let realm = try! Realm()
     let defaults = UserDefaults.standard
     let activityList = UserDefaults.standard.stringArray(forKey: Config.activityList)
@@ -33,25 +32,14 @@ class LabelingViewController: FormViewController {
         
                 for activity in activityList! {
                     $0 <<< SwitchRow {
+                        $0.tag = activity
                         $0.title = activity
                         $0.value = false
-                        }.onChange{row in
-                            row.cell.backgroundColor = row.value! ? UIColor.flatWhiteDark : UIColor.white
-                            let section = self.form.sectionBy(tag: Config.activityList) as! MultivaluedSection
-                            for value in section.values() {
-                                if let isOn = value as? Bool {
-                                    if isOn {
-                                        self.navigationController?.navigationBar.barTintColor = UIColor.flatSkyBlueDark
-                                        self.title = "次の通信処理待ち"
-                                        return
-                                    }
-                                }
-                            }
-                            self.navigationController?.navigationBar.barTintColor = UIColor.flatRed
-                            self.title = "行動未選択"
-                            
-                        }.cellSetup() {cell, row in
-                            cell.switchControl.onTintColor = UIColor.flatGreen
+                    }.onChange{row in
+                        row.cell.backgroundColor = row.value! ? UIColor.flatWhiteDark : UIColor.white
+                        self.write(tag: row.tag!)
+                    }.cellSetup() {cell, row in
+                        cell.switchControl.onTintColor = UIColor.flatGreen
                     }
                 }
                 
@@ -62,6 +50,17 @@ class LabelingViewController: FormViewController {
                 <<< ButtonRow() {
                     $0.title = "ラベリング終了"
                 }.onCellSelection { _, _ in
+                    if self.selectedCheck() {
+                        let alert = UIAlertController(title: "エラー",
+                                                      message: "全ての行動を終了させてください",
+                                                      preferredStyle: .alert)
+                        
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alert, animated: true)
+                        return
+                    }
+                    
+                    
                     let alert = UIAlertController(title: "ラベリング終了",
                                                   message: "本当に終了してよろしいですか？",
                                                   preferredStyle: .alert)
@@ -74,44 +73,28 @@ class LabelingViewController: FormViewController {
                     alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
                     
                     self.present(alert, animated: true)
-                    }
+                }
 
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.setTimer()
-        NotificationCenter.default.addObserver(self, selector: #selector(LabelingViewController.willEnterForeground), name: .UIApplicationWillEnterForeground, object: nil)
-    }
-    
-    @objc func willEnterForeground() {
-        if (self.timer?.isValid)! {
-            return
+    func selectedCheck() -> Bool {
+        let section = self.form.sectionBy(tag: Config.activityList) as! MultivaluedSection
+        
+        for value in section.values() {
+            if let isOn = value as? Bool {
+                if isOn {
+                    return true
+                }
+            }
         }
-        self.setTimer()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        self.timer?.invalidate()
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
-    }
-    
-    func setTimer() {
-        let period = defaults.integer(forKey: Config.period)
-        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(period), target: self, selector: #selector(LabelingViewController.write), userInfo: nil, repeats: true)
-        write()
+        return false
     }
     
     func save() {
         let labeling = Labeling()
         self.id = labeling.id
         labeling.host = self.defaults.string(forKey: Config.host)!
-        let activityList = self.defaults.stringArray(forKey: Config.activityList)
-        for name in activityList! {
-            let activity = Activity()
-            activity.name = name
-            labeling.activityList.append(activity)
-        }
-        labeling.period = self.defaults.integer(forKey: Config.period)
+        
         let realm = try! Realm()
         try! realm.write {
             realm.add(labeling)
@@ -119,37 +102,25 @@ class LabelingViewController: FormViewController {
     }
     
     
-    func add() {
-        let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
+    func add(activity:String, on:Bool) {
         let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: self.id)
         let label = Label()
-        for (name, value) in zip(activityList!, section.values()) {
-            if let isOn = value as? Bool {
-                if isOn {
-                    let activity = Activity()
-                    activity.name = name
-                    label.activities.append(activity)
-                }
-            }
-        }
+        label.activity = activity
+        label.on = on
         try! realm.write {
             labeling?.labels.append(label)
         }
     }
     
-    @objc func write() {
-        let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
-        var fields: [String: Int] = [:]
-        for (name, value) in zip(activityList!, section.values()) {
-            if let isOn = value as? Bool {
-                if isOn {
-                    fields[name] = 1
-                }
-            }
-        }
-        if fields.isEmpty {
-            return
-        }
+    func write(tag:String) {
+        let row = form.rowBy(tag: tag) as! SwitchRow
+        let activity = row.title!
+        let on = row.value!
+        
+        var fields: [String: Any] = [:]
+        fields["activity"] = activity
+        fields["on"] = on ? 1:0
+        
         let database = defaults.string(forKey: Config.database)!
         let measurement = defaults.string(forKey: Config.measurement)!
         let host = defaults.string(forKey: Config.host)!
@@ -159,10 +130,15 @@ class LabelingViewController: FormViewController {
         Session.send(request) { result in
             switch result {
             case .success:
-                self.add()
+                self.add(activity: activity, on: on)
                 self.navigationController?.navigationBar.barTintColor = UIColor.flatMintDark
-                self.title = "通信状態良好"
+                self.title = "通信成功"
+                if !self.selectedCheck() {
+                    self.navigationController?.navigationBar.barTintColor = UIColor.flatRed
+                    self.title = "行動未選択"
+                }
             case .failure:
+                row.value = on ? false:true
                 self.navigationController?.navigationBar.barTintColor = UIColor.flatRed
                 self.title = "通信失敗"
             }

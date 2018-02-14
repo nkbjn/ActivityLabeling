@@ -47,9 +47,7 @@ class LabelTableViewController: UITableViewController {
         f.locale = Locale(identifier: "ja_JP")
         cell.textLabel?.text = f.string(from: label.time)
         
-        cell.detailTextLabel?.text = label.activities.reduce("") { (result, activity) in
-            return result + " " + activity.name
-        }
+        cell.detailTextLabel?.text = "\(label.activity):\(label.on ? "on":"off")"
         
         return cell
     }

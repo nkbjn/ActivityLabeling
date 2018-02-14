@@ -12,8 +12,6 @@ import RealmSwift
 class Labeling: Object {
     @objc dynamic var id = NSUUID().uuidString
     @objc dynamic var host = ""
-    let activityList = List<Activity>()
-    @objc dynamic var period = 10
     @objc dynamic var startTime = Date()
     let labels = List<Label>()
     
@@ -25,13 +23,10 @@ class Labeling: Object {
 class Label: Object {
     @objc dynamic var id = NSUUID().uuidString
     @objc dynamic var time = Date()
-    let activities = List<Activity>()
+    @objc dynamic var activity = ""
+    @objc dynamic var on = true
     
     override static func primaryKey() -> String? {
         return "id"
     }
-}
-
-class Activity: Object {
-    @objc dynamic var name = ""
 }

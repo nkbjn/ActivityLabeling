@@ -48,7 +48,7 @@ class HistoryTableViewController: UITableViewController {
         f.locale = Locale(identifier: "ja_JP")
         cell.textLabel?.text = "\(f.string(from: labeling.startTime)) 〜"
         
-        cell.detailTextLabel?.text = "\(labeling.host)  \(labeling.period)秒おき"
+        cell.detailTextLabel?.text = "\(labeling.host)"
         
         cell.accessoryType = .disclosureIndicator
         
