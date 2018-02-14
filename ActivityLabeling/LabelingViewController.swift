@@ -33,7 +33,7 @@ class LabelingViewController: FormViewController {
         self.labelingCreate()
         
         form
-            +++ MultivaluedSection() {
+            +++ MultivaluedSection(multivaluedOptions:[]) {
                 
                 // 選択状態を取得するためにタグをつけておく
                 $0.tag = Config.activityList
