@@ -14,11 +14,9 @@ open class InfluxDBClient {
     public typealias Fields = [String: Any]
     
     public let host: URL
-    public let database: String
     
-    public init(host: URL, databaseName: String) {
+    public init(host: URL) {
         self.host = host
-        self.database = databaseName
     }
     
 }

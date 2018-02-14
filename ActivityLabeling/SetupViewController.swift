@@ -65,9 +65,8 @@ class SetupViewController: FormViewController {
     
     /// DBサーバへの接続テストを行う
     func ping() {
-        let database = self.defaults.string(forKey: Config.database)
         let host = self.defaults.string(forKey: Config.host)
-        let influxdb = InfluxDBClient(host: URL(string: host!)! ,databaseName: database!)
+        let influxdb = InfluxDBClient(host: URL(string: host!)!)
         let request = PingRequest(influxdb: influxdb)
         
         Session.send(request) { result in

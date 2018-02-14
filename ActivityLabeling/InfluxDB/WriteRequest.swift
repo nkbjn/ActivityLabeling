@@ -12,16 +12,20 @@ class WriteRequest: InfluxDBRequest {
     let influxdb: InfluxDBClient
     
     let measurement: String
+    let database: String
     let tags: InfluxDBClient.Tags
     let fields: InfluxDBClient.Fields
     let time: TimeInterval?
     
+    
     init(influxdb: InfluxDBClient,
+         database: String,
          measurement: String,
          tags: InfluxDBClient.Tags,
          fields: InfluxDBClient.Fields,
          time: TimeInterval? = nil) {
         self.influxdb = influxdb
+        self.database = database
         self.measurement = measurement
         self.tags = tags
         self.fields = fields
@@ -32,7 +36,7 @@ class WriteRequest: InfluxDBRequest {
     var path = "/write"
     
     var queryParameters: [String: Any]? {
-        return ["db": self.influxdb.database]
+        return ["db": self.database]
     }
     
     var bodyParameters: BodyParameters? {
