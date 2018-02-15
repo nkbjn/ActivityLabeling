@@ -93,11 +93,11 @@ class SetupViewController: FormViewController {
     // ラベリングを開始する
     func labelingStart() {
         let host = defaults.string(forKey: Config.host)!
-        let activityList = defaults.stringArray(forKey: Config.activityList)!
+        let activityDict = defaults.dictionary(forKey: Config.activityDict)!
         
         var message = "接続先：\(host) \n\n"
         message = message + "対象行動\n"
-        for activity in activityList {
+        for (_, activity) in activityDict {
             message = message + "・\(activity)\n"
         }
         
@@ -141,12 +141,12 @@ class ActivitySelectViewController: FormViewController {
         super.viewDidLoad()
         self.title = "行動ラベル"
         
-        let activityList = defaults.stringArray(forKey: Config.activityList)
+        let activityDict = defaults.dictionary(forKey: Config.activityDict)
         
         form +++
             MultivaluedSection(multivaluedOptions:[.Insert, .Delete]) {
                 // データ保存用にタグをつけておく
-                $0.tag = Config.activityList
+                $0.tag = Config.activityDict
                 
                 $0.addButtonProvider = { section in
                     return ButtonRow(){
@@ -166,10 +166,10 @@ class ActivitySelectViewController: FormViewController {
                 }
                 
                 // すでに保存している行動を表示する
-                for activity in activityList! {
+                for (_, activity) in activityDict! {
                     $0 <<< TextRow {
                         $0.placeholder = "行動名"
-                        $0.value = activity
+                        $0.value = (activity as! String)
                         
                     }
                 }
@@ -179,8 +179,8 @@ class ActivitySelectViewController: FormViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         // 画面が切り替わったら保存する
-        let section = form.sectionBy(tag: Config.activityList) as! MultivaluedSection
-        defaults.set(section.values(), forKey: Config.activityList)
+        let section = form.sectionBy(tag: Config.activityDict) as! MultivaluedSection
+        defaults.set(section.values(), forKey: Config.activityDict)
     }
 
 }

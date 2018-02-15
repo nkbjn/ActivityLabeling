@@ -17,7 +17,7 @@ class LabelingCollectionViewController: UICollectionViewController {
     var labelingID: String? // ラベリングを保存するときのID
     let realm = try! Realm()
     let defaults = UserDefaults.standard
-    let activityList = UserDefaults.standard.stringArray(forKey: Config.activityList)!
+    let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
     
 
     override func viewDidLoad() {
@@ -160,16 +160,16 @@ class LabelingCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return activityList.count
+        return activityDict.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ActivityCollectionViewCell
     
         // Configure the cell
-        let activity = activityList[indexPath.row]
-        cell.imageView.image = UIImage(named:"\(activity)")?.withRenderingMode(.alwaysTemplate)
-        
+        let key = Array(activityDict.keys)[indexPath.row]
+        let activity = activityDict[key] as! String
+        cell.imageView.image = UIImage(named:"\(key)")?.withRenderingMode(.alwaysTemplate)
         cell.textLabel.text = activity
     
         return cell
