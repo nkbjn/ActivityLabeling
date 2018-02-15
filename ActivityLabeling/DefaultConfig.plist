@@ -10,24 +10,25 @@
 	<string>http://xxx.xxx.xxx.xxx:8086</string>
 	<key>activityList</key>
 	<array>
-		<string>cooking</string>
-		<string>eating</string>
-		<string>cleaning_the_room</string>
-		<string>bathing</string>
-		<string>sleeping</string>
-		<string>reading_a_book</string>
-		<string>washing_my_face</string>
-		<string>washing_the_dishes</string>
-		<string>watching_the_tv</string>
-		<string>cleaning_the_bathroom</string>
-		<string>working_on_a_pc</string>
-		<string>dressing</string>
-		<string>going_outside</string>
-		<string>doing_laundry</string>
-		<string>playing_a_video_game</string>
-		<string>playing_a_mobile_phone</string>
-		<string>brushing_my_teeth</string>
-		<string>putting_on_makeup</string>
+		<string>cook</string>
+		<string>eat</string>
+		<string>clean_room</string>
+		<string>bath</string>
+		<string>sleep</string>
+		<string>read_book</string>
+		<string>wash_face</string>
+		<string>wash_dishes</string>
+		<string>watch_tv</string>
+		<string>clean_bath</string>
+		<string>work_on_pc</string>
+		<string>dress</string>
+		<string>go_outside</string>
+		<string>laundry</string>
+		<string>play_game</string>
+		<string>use_phone</string>
+		<string>brush_teeth</string>
+		<string>makeup</string>
+		<string>other</string>
 	</array>
 </dict>
 </plist>

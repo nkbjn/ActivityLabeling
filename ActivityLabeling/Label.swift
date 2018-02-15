@@ -30,7 +30,7 @@ class Label: Object {
     @objc dynamic var id = NSUUID().uuidString  // ユニークID
     @objc dynamic var time = Date()             // ラベリング時の時刻
     @objc dynamic var activity = ""             // 変更行動
-    @objc dynamic var status = true                 // 変更後の状態
+    @objc dynamic var status = true             // 変更後の状態
     
     override static func primaryKey() -> String? {
         return "id"

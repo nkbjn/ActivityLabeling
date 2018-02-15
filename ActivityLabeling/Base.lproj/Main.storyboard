@@ -146,21 +146,37 @@
             </objects>
             <point key="canvasLocation" x="-26" y="-412"/>
         </scene>
-        <!--Labeling View Controller-->
-        <scene sceneID="x9u-Ri-wwd">
+        <!--Labeling Collection View Controller-->
+        <scene sceneID="Gci-th-pa8">
             <objects>
-                <viewController id="EgG-9u-lBD" customClass="LabelingViewController" customModule="ActivityLabeling" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="gwM-il-Vwo">
+                <collectionViewController id="B2K-d8-YdT" customClass="LabelingCollectionViewController" customModule="ActivityLabeling" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="7J6-6m-6ZH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="D8k-CZ-rzf"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="lsJ-aR-teZ"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VI2-hj-Xnl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ClM-Ow-ndU">
+                            <size key="itemSize" width="100" height="100"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
+                        </collectionViewFlowLayout>
+                        <cells/>
+                        <connections>
+                            <outlet property="dataSource" destination="B2K-d8-YdT" id="ujJ-PC-roO"/>
+                            <outlet property="delegate" destination="B2K-d8-YdT" id="3bG-3m-C4K"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="UVz-iz-oYQ">
+                        <barButtonItem key="rightBarButtonItem" title="終了" id="skJ-qM-2Er">
+                            <connections>
+                                <action selector="exit:" destination="B2K-d8-YdT" id="0ix-Mc-eow"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bBy-Ra-Lyc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1687" y="-52"/>
+            <point key="canvasLocation" x="2378" y="-53"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="0lN-JI-vf6">
@@ -171,7 +187,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="EgG-9u-lBD" kind="relationship" relationship="rootViewController" id="0d4-Up-nOT"/>
+                        <segue destination="B2K-d8-YdT" kind="relationship" relationship="rootViewController" id="mCY-oK-gcB"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="icO-BB-rhE" userLabel="First Responder" sceneMemberID="firstResponder"/>
