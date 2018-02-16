@@ -16,6 +16,7 @@ class LabelTableViewController: UITableViewController {
     lazy var realm = try! Realm()
     var labels: List<Label>!
     var labelingID: String?
+    let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
     
     
     override func viewDidLoad() {
@@ -48,7 +49,8 @@ class LabelTableViewController: UITableViewController {
         f.locale = Locale(identifier: "ja_JP")
         cell.textLabel?.text = f.string(from: label.time)
         
-        cell.detailTextLabel?.text = "\(label.activity):\(label.status ? "on":"off")"
+        let activity = activityDict[label.activity] as! String
+        cell.detailTextLabel?.text = "\(activity):\(label.status ? "開始":"終了")"
         
         return cell
     }
