@@ -1,5 +1,5 @@
 //
-//  LabelingCollectionViewController.swift
+//  LabelingViewController.swift
 //  ActivityLabeling
 //
 //  Created by Wataru Sasaki on 2018/02/15.
@@ -12,7 +12,9 @@ import RealmSwift
 
 private let reuseIdentifier = "Cell"
 
-class LabelingCollectionViewController: UICollectionViewController {
+class LabelingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    @IBOutlet var collectionView: UICollectionView!
     
     var labelingID: String? // ラベリングを保存するときのID
     let realm = try! Realm()
@@ -155,18 +157,26 @@ class LabelingCollectionViewController: UICollectionViewController {
         self.present(alert, animated: true)
     }
     
+    // MARK: UICollectionViewDelegateFlowLayout
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width: CGFloat = self.view.frame.width / 4
+        let height: CGFloat = width
+        return CGSize(width: width, height: height)
+    }
+    
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return activityDict.count
     }
 
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! LabelingCollectionViewCell
     
         // Configure the cell
@@ -178,9 +188,10 @@ class LabelingCollectionViewController: UICollectionViewController {
         return cell
     }
     
+    
     // MARK: UICollectionViewDelegate
     
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
         let activity = Array(activityDict.keys)[indexPath.row]
         let activityName = activityDict[activity] as! String
@@ -209,7 +220,7 @@ class LabelingCollectionViewController: UICollectionViewController {
         self.present(alert, animated: true)
     }
     
-    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
         let activity = Array(activityDict.keys)[indexPath.row]
         let activityName = activityDict[activity] as! String
