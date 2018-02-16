@@ -179,10 +179,11 @@ class LabelingCollectionViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! ActivityCollectionViewCell
-        let activity = cell.textLabel.text!
+        let activity = Array(activityDict.keys)[indexPath.row]
+        let activityName = activityDict[activity] as! String
         let status = cell.isSelected
         
-        let massage = "\(activity)を開始しますか？"
+        let massage = "\(activityName)を開始しますか？"
         let alert = UIAlertController(title: "行動開始", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "開始", style: .default, handler: { action in
             self.labelSend(activity: activity, status: status, handler: { response in
@@ -204,10 +205,11 @@ class LabelingCollectionViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! ActivityCollectionViewCell
-        let activity = cell.textLabel.text!
+        let activity = Array(activityDict.keys)[indexPath.row]
+        let activityName = activityDict[activity] as! String
         let status = cell.isSelected
         
-        let massage = "\(cell.textLabel.text!)を終了しますか？"
+        let massage = "\(activityName)を終了しますか？"
         let alert = UIAlertController(title: "行動終了", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "終了", style: .default, handler: { action in
             self.labelSend(activity: activity, status: status, handler: { response in
