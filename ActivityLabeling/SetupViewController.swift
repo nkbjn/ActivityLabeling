@@ -43,11 +43,11 @@ class SetupViewController: FormViewController {
             }
             
             
-            +++ Section("ラベリングする行動の設定")
+            +++ Section("ラベリングする行動")
             
             <<< ButtonRow() {
-                $0.title = "対象行動の確認/変更"
-                $0.presentationMode = .segueName(segueName: "ActivitySelectViewControllerControllerSegue", onDismiss: nil)
+                $0.title = "対象行動の確認"
+                $0.presentationMode = .segueName(segueName: "ActivityTableViewControllerControllerSegue", onDismiss: nil)
             }
             
             
@@ -132,55 +132,34 @@ class SetupViewController: FormViewController {
 }
 
 
-/// ラベリング行動設定画面
-class ActivitySelectViewController: FormViewController {
+/// ラベリング行動確認画面
+class ActivityTableViewController: UITableViewController {
     
-    let defaults = UserDefaults.standard
+    let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "行動ラベル"
-        
-        let activityDict = defaults.dictionary(forKey: Config.activityDict)
-        
-        form +++
-            MultivaluedSection(multivaluedOptions:[.Insert, .Delete]) {
-                // データ保存用にタグをつけておく
-                $0.tag = Config.activityDict
-                
-                $0.addButtonProvider = { section in
-                    return ButtonRow(){
-                        $0.title = "行動ラベルを追加"
-                        
-                    }.cellUpdate { cell, row in
-                        cell.textLabel?.textAlignment = .left
-                        
-                    }
-                }
-                
-                $0.multivaluedRowToInsertAt = { index in
-                    return TextRow() {
-                        $0.placeholder = "行動名"
-                        
-                    }
-                }
-                
-                // すでに保存している行動を表示する
-                for (_, activity) in activityDict! {
-                    $0 <<< TextRow {
-                        $0.placeholder = "行動名"
-                        $0.value = (activity as! String)
-                        
-                    }
-                }
-        }
-        
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        // 画面が切り替わったら保存する
-        let section = form.sectionBy(tag: Config.activityDict) as! MultivaluedSection
-        defaults.set(section.values(), forKey: Config.activityDict)
+    // MARK: - Table view data source
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return activityDict.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        
+        let key = Array(activityDict.keys)[indexPath.row]
+        let activity = activityDict[key] as! String
+        cell.textLabel?.text = activity
+        
+        return cell
     }
 
 }
