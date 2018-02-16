@@ -195,13 +195,13 @@ class LabelingCollectionViewController: UICollectionViewController {
                     self.changeStatus()
                 } else {
                     // 通信失敗したら選択状態を元に戻す
-                    cell.isSelected = false
+                    collectionView.deselectItem(at: indexPath, animated: true)
                 }
             })
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
             // キャンセル時には選択状態を元に戻す
-            cell.isSelected = false
+            collectionView.deselectItem(at: indexPath, animated: true)
         }))
         self.present(alert, animated: true)
     }
@@ -221,18 +221,17 @@ class LabelingCollectionViewController: UICollectionViewController {
                     self.labelAdd(activity: activity, status: status)
                     
                     cell.iconView.backgroundColor = .flatBlack
-                    cell.isSelected = false
                     
                     self.changeStatus()
                 } else {
                     // 通信失敗したら選択状態を元に戻す
-                    cell.isSelected = true
+                    collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
                 }
             })
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
             // キャンセル時には選択状態を元に戻す
-            cell.isSelected = true
+            collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
         }))
         self.present(alert, animated: true)
     }
