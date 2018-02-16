@@ -26,6 +26,9 @@ class LabelingCollectionViewController: UICollectionViewController {
         self.collectionView!.register(UINib(nibName: "ActivityCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView?.allowsMultipleSelection = true
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         // ラベリング情報を作成
         self.labelingCreate()
         
