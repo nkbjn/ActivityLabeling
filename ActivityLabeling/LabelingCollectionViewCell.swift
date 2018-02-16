@@ -1,5 +1,5 @@
 //
-//  ActivityCollectionViewCell.swift
+//  LabelingCollectionViewCell.swift
 //  ActivityLabeling
 //
 //  Created by Wataru Sasaki on 2018/02/15.
@@ -9,7 +9,7 @@
 import UIKit
 import ChameleonFramework
 
-class ActivityCollectionViewCell: UICollectionViewCell {
+class LabelingCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var iconView: UIView!
     @IBOutlet weak var imageView: UIImageView!

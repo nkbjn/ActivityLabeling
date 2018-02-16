@@ -23,7 +23,7 @@ class LabelingCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView!.register(UINib(nibName: "ActivityCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView!.register(UINib(nibName: "LabelingCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView?.allowsMultipleSelection = true
         
     }
@@ -167,7 +167,7 @@ class LabelingCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ActivityCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! LabelingCollectionViewCell
     
         // Configure the cell
         let key = Array(activityDict.keys)[indexPath.row]
@@ -181,7 +181,7 @@ class LabelingCollectionViewController: UICollectionViewController {
     // MARK: UICollectionViewDelegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! ActivityCollectionViewCell
+        let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
         let activity = Array(activityDict.keys)[indexPath.row]
         let activityName = activityDict[activity] as! String
         let status = cell.isSelected
@@ -210,7 +210,7 @@ class LabelingCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! ActivityCollectionViewCell
+        let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
         let activity = Array(activityDict.keys)[indexPath.row]
         let activityName = activityDict[activity] as! String
         let status = cell.isSelected
