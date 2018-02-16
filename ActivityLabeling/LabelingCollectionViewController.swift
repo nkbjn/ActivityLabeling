@@ -199,7 +199,10 @@ class LabelingCollectionViewController: UICollectionViewController {
                 }
             })
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
+            // キャンセル時には選択状態を元に戻す
+            cell.isSelected = false
+        }))
         self.present(alert, animated: true)
     }
     
@@ -227,7 +230,10 @@ class LabelingCollectionViewController: UICollectionViewController {
                 }
             })
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
+            // キャンセル時には選択状態を元に戻す
+            cell.isSelected = true
+        }))
         self.present(alert, animated: true)
     }
 
