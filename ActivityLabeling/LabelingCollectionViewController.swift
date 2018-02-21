@@ -112,12 +112,13 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     ///   - handler: 送信結果を返却する
     func sendLabel(activity: String, status: Bool, handler: @escaping (Bool) -> ()) {
         
+        var tags: [String: String] = [:]
+        tags["activity"] = activity
         var fields: [String: Any] = [:]
-        fields["activity"] = activity
         fields["status"] = status ? 1:0
         
         let influxdb = InfluxDBClient(host: host, user: user, password: password)
-        let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: [:], fields: fields)
+        let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: tags, fields: fields)
         
         Session.send(request) { result in
             switch result {
