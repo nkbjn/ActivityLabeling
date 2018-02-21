@@ -35,7 +35,7 @@ class SetupViewController: FormViewController {
                 self.defaults.set(row.value, forKey: Config.host)
             }
             
-            <<< TextRow() {
+            <<< NameRow() {
                 $0.tag = Config.user
                 $0.title = "ユーザ名"
                 $0.placeholder = "入力してください"
@@ -139,7 +139,7 @@ class SetupViewController: FormViewController {
             host.value = self.defaults.string(forKey: Config.host)
             host.reload()
             
-            let user = self.form.rowBy(tag: Config.user) as! TextRow
+            let user = self.form.rowBy(tag: Config.user) as! NameRow
             user.value = self.defaults.string(forKey: Config.user)
             user.reload()
             
