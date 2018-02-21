@@ -14,42 +14,42 @@ private let reuseIdentifier = "Cell"
 
 class LabelingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    let realm = try! Realm()
+    let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
+    let database = UserDefaults.standard.string(forKey: Config.database)!
+    let measurement = UserDefaults.standard.string(forKey: Config.measurement)!
+    let host = UserDefaults.standard.string(forKey: Config.host)!
+    let user = UserDefaults.standard.string(forKey: Config.user)!
+    let password = UserDefaults.standard.string(forKey: Config.password)!
+    
     @IBOutlet var collectionView: UICollectionView!
     
-    var labelingID: String? // ラベリングを保存するときのID
-    let realm = try! Realm()
-    let defaults = UserDefaults.standard
-    let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
-    
+    var id: String? // ラベリングを保存するときのID
     var selectedItems = [Int: Bool]()
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView!.register(UINib(nibName: "LabelingCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView?.allowsMultipleSelection = true
-        
+        collectionView!.register(UINib(nibName: "LabelingCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView?.allowsMultipleSelection = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // ラベリング情報を作成
-        self.labelingCreate()
-        
-        // ラベリング開始時には行動未選択状態にする
-        self.changeStatus()
+        createLabeling()
+        changeStatus()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         // 画面の向きが変わったらアイコンの大きさを更新する
-        self.collectionView.reloadData()
+        collectionView.reloadData()
     }
     
     /// 行動が選択されているかどうかを判定する
     ///
     /// - Returns: 行動が一つでも選択されているかどうか
-    func selectedCheck() -> Bool {
-        if self.selectedItems.isEmpty {
+    func selected() -> Bool {
+        if selectedItems.isEmpty {
             return false
         }
         return true
@@ -58,27 +58,27 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     /// 行動が選択されているかどうかを確認して、ステータスを変更する
     func changeStatus() {
-        // もし行動が選択されていなければステータスを未選択に変える
-        if !self.selectedCheck() {
-            self.navigationController?.navigationBar.barTintColor = UIColor.flatRed
-            self.title = "行動未選択"
+        if selected() {
+            // 行動が選択されていればステータスをノーマルに変える
+            navigationController?.navigationBar.barTintColor = .flatBlack
+            title = ""
         } else {
-            self.navigationController?.navigationBar.barTintColor = UIColor.flatBlack
-            self.title = ""
+            // 行動が選択されていなければステータスを未選択に変える
+            navigationController?.navigationBar.barTintColor = .flatRed
+            title = "行動未選択"
         }
     }
     
     
     /// Realmにラベリングデータを作成する
-    func labelingCreate() {
+    func createLabeling() {
         let labeling = Labeling()
         
         // 行動選択時にラベルデータを追加するために変数に代入しておく
-        self.labelingID = labeling.id
+        id = labeling.id
         
-        labeling.host = self.defaults.string(forKey: Config.host)!
+        labeling.host = host
         
-        let realm = try! Realm()
         try! realm.write {
             realm.add(labeling)
         }
@@ -90,9 +90,9 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     /// - Parameters:
     ///   - activity: 追加する行動
     ///   - status: 追加する行動の状態
-    func labelAdd(activity: String, status: Bool) {
+    func addLabel(activity: String, status: Bool) {
         // ラベリングデータをIDから検索する
-        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: self.labelingID)
+        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: id)
         
         let label = Label()
         label.activity = activity
@@ -110,17 +110,12 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     ///   - activity: 行動
     ///   - status: 行動の状態
     ///   - handler: 送信結果を返却する
-    func labelSend(activity: String, status: Bool, handler: @escaping (Bool) -> ()) {
+    func sendLabel(activity: String, status: Bool, handler: @escaping (Bool) -> ()) {
         
         var fields: [String: Any] = [:]
         fields["activity"] = activity
         fields["status"] = status ? 1:0
         
-        let database = defaults.string(forKey: Config.database)!
-        let measurement = defaults.string(forKey: Config.measurement)!
-        let host = defaults.string(forKey: Config.host)!
-        let user = defaults.string(forKey: Config.user)!
-        let password = defaults.string(forKey: Config.password)!
         let influxdb = InfluxDBClient(host: URL(string: host)!, user: user, password: password)
         let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: [:], fields: fields)
         
@@ -141,13 +136,14 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     /// 終了ボタンを押した時の処理
     @IBAction func exit(_ sender: Any) {
-        // 行動を選択している状態で終了されると困るのでチェック
-        if self.selectedCheck() {
+        
+        guard !selected() else {
+            // 行動を選択している状態で終了しようとした場合
             let alert = UIAlertController(title: "エラー",
                                           message: "全ての行動を終了させてください",
                                           preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alert, animated: true)
+            present(alert, animated: true)
             return
         }
         
@@ -161,14 +157,15 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
                                         self.dismiss(animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
+    
     
     // MARK: UICollectionViewDelegateFlowLayout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat = self.view.frame.width
-        let height: CGFloat = self.view.frame.height
+        let width: CGFloat = view.frame.width
+        let height: CGFloat = view.frame.height
         var cellSize: CGFloat = 0
         if width < height {
             cellSize = width / 5
@@ -223,10 +220,10 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let massage = "\(activityName)を開始しますか？"
         let alert = UIAlertController(title: "行動開始", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "開始", style: .default, handler: { action in
-            self.labelSend(activity: activity, status: status, handler: { response in
+            self.sendLabel(activity: activity, status: status, handler: { response in
                 if response {
                     // 通信成功したらRealmにも保存する
-                    self.labelAdd(activity: activity, status: status)
+                    self.addLabel(activity: activity, status: status)
                     
                     self.selectedItems[indexPath.row] = true
                     cell.iconView.backgroundColor = .flatSkyBlue
@@ -242,7 +239,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
             // キャンセル時には選択状態を元に戻す
             collectionView.deselectItem(at: indexPath, animated: true)
         }))
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -254,26 +251,28 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let massage = "\(activityName)を終了しますか？"
         let alert = UIAlertController(title: "行動終了", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "終了", style: .default, handler: { action in
-            self.labelSend(activity: activity, status: status, handler: { response in
-                if response {
-                    // 通信成功したらRealmにも保存する
-                    self.labelAdd(activity: activity, status: status)
-                    
-                    self.selectedItems.removeValue(forKey: indexPath.row)
-                    cell.iconView.backgroundColor = .flatBlack
-                    
-                    self.changeStatus()
-                } else {
+            self.sendLabel(activity: activity, status: status, handler: { response in
+                
+                guard response else {
                     // 通信失敗したら選択状態を元に戻す
                     collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+                    return
                 }
+                
+                // 通信成功したらRealmにも保存する
+                self.addLabel(activity: activity, status: status)
+                
+                self.selectedItems.removeValue(forKey: indexPath.row)
+                cell.iconView.backgroundColor = .flatBlack
+                
+                self.changeStatus()
             })
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
             // キャンセル時には選択状態を元に戻す
             collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
         }))
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
 
 }

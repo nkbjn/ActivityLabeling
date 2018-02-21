@@ -15,16 +15,16 @@ class LabelTableViewController: UITableViewController {
 
     lazy var realm = try! Realm()
     var labels: List<Label>!
-    var labelingID: String?
+    var id: String?
     let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "ラベル"
+        title = "ラベル"
         tableView.allowsSelection = false
         
-        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: labelingID)
+        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: id)
         labels = labeling?.labels
     }
     

@@ -133,7 +133,7 @@
                     <navigationItem key="navigationItem" id="RqK-2b-qUQ">
                         <barButtonItem key="rightBarButtonItem" title="初期化" id="eec-LO-v1w">
                             <connections>
-                                <action selector="reset:" destination="L1o-Te-wEB" id="azL-84-Lw9"/>
+                                <action selector="resetConfig:" destination="L1o-Te-wEB" id="zhd-gF-jYq"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -241,6 +241,7 @@
         <!--Activity Table View Controller-->
         <scene sceneID="9aj-ds-Lyf">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="amn-LH-nxK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="013-bf-DsZ" customClass="ActivityTableViewController" customModule="ActivityLabeling" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Kto-5Q-6ow">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
@@ -262,7 +263,6 @@
                         </connections>
                     </tableView>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="amn-LH-nxK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="825" y="-745"/>
         </scene>

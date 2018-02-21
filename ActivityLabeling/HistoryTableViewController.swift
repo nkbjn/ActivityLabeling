@@ -20,7 +20,7 @@ class HistoryTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "履歴"
+        title = "履歴"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,7 +75,7 @@ class HistoryTableViewController: UITableViewController {
         if segue.identifier == "LabelTableViewControllerSegue" {
             // どの履歴をタップしたのかを保存する
             let vc = segue.destination as! LabelTableViewController
-            vc.labelingID = selectedID
+            vc.id = selectedID
         }
     }
 

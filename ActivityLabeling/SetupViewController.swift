@@ -20,10 +20,10 @@ class SetupViewController: FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "ラベリング"
+        title = "ラベリング"
         
         form
-            +++ Section("ラベルデータを保存するデータベースの設定")
+            +++ Section("データベースの設定")
             
             <<< TextRow() {
                 $0.tag = Config.host
@@ -61,7 +61,7 @@ class SetupViewController: FormViewController {
                 $0.title = "接続テスト"
                 
             }.onCellSelection {_, _ in
-                self.ping()
+                self.connectionTest()
             }
             
             
@@ -79,15 +79,15 @@ class SetupViewController: FormViewController {
                 $0.title = "ラベリング開始"
                 
             }.onCellSelection {_, _ in
-                self.labelingStart()
+                self.startLabeling()
             }
         
     }
     
     
     /// DBサーバへの接続テストを行う
-    func ping() {
-        let host = self.defaults.string(forKey: Config.host)!
+    func connectionTest() {
+        let host = defaults.string(forKey: Config.host)!
         let user = defaults.string(forKey: Config.user)!
         let password = defaults.string(forKey: Config.password)!
         let influxdb = InfluxDBClient(host: URL(string: host)!, user: user, password: password)
@@ -115,28 +115,19 @@ class SetupViewController: FormViewController {
     
     
     // ラベリングを開始する
-    func labelingStart() {
-        let host = defaults.string(forKey: Config.host)!
-        let activityDict = defaults.dictionary(forKey: Config.activityDict)!
-        
-        var message = "接続先：\(host) \n\n"
-        message = message + "対象行動\n"
-        for (_, activity) in activityDict {
-            message = message + "・\(activity)\n"
-        }
-        
-        let alert = UIAlertController(title: "ラベリング開始", message: message, preferredStyle: .alert)
+    func startLabeling() {
+        let alert = UIAlertController(title: "ラベリング開始", message: "ラベリングを開始しますか？", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "開始", style: .default, handler: { action in
             // ラベリング画面に遷移
             self.performSegue(withIdentifier: "LabelingViewControllerSegue", sender: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
     
     
-    
-    @IBAction func reset(_ sender: Any) {
+    // 設定を初期設定に戻す
+    @IBAction func resetConfig(_ sender: Any) {
         let alert = UIAlertController(title: "設定の初期化", message: "本当に初期化してよろしいですか？", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
             
@@ -158,7 +149,7 @@ class SetupViewController: FormViewController {
             
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
     
 }
@@ -171,7 +162,7 @@ class ActivityTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "行動ラベル"
+        title = "行動ラベル"
     }
     
     // MARK: - Table view data source
