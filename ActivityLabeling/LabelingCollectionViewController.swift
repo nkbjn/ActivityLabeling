@@ -40,6 +40,11 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         self.changeStatus()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        // 画面の向きが変わったらアイコンの大きさを更新する
+        self.collectionView.reloadData()
+    }
+    
     /// 行動が選択されているかどうかを判定する
     ///
     /// - Returns: 行動が一つでも選択されているかどうか
@@ -162,9 +167,15 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     // MARK: UICollectionViewDelegateFlowLayout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat = self.view.frame.width / 4
-        let height: CGFloat = width
-        return CGSize(width: width, height: height)
+        let width: CGFloat = self.view.frame.width
+        let height: CGFloat = self.view.frame.height
+        var cellSize: CGFloat = 0
+        if width < height {
+            cellSize = width / 5
+        } else {
+            cellSize = height / 5
+        }
+        return CGSize(width: cellSize, height: cellSize)
     }
     
 
