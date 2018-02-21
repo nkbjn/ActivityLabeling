@@ -10,6 +10,8 @@
 /// 設定をUserDefaultに保存するときのKey
 struct Config {
     
+    static let user = "user"
+    static let password = "password"
     static let database = "database"
     static let measurement = "measurement"
     static let host = "host"

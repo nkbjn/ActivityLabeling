@@ -36,7 +36,15 @@ class WriteRequest: InfluxDBRequest {
     var path = "/write"
     
     var queryParameters: [String: Any]? {
-        return ["db": self.database]
+        var params: [String: Any] = [:]
+        params["db"] = database
+        if let user = self.influxdb.user {
+            params["u"] = user
+        }
+        if let password = self.influxdb.password {
+            params["p"] = password
+        }
+        return params
     }
     
     var bodyParameters: BodyParameters? {

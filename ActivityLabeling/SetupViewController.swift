@@ -35,6 +35,28 @@ class SetupViewController: FormViewController {
                 self.defaults.set(row.value, forKey: Config.host)
             }
             
+            <<< TextRow() {
+                $0.tag = Config.user
+                $0.title = "ユーザ名"
+                $0.placeholder = "入力してください"
+                $0.value = defaults.string(forKey: Config.user)
+                
+                }.onChange {row in
+                    // 内容が変更されたらUserdefaultsに書き込む
+                    self.defaults.set(row.value, forKey: Config.user)
+            }
+            
+            <<< PasswordRow() {
+                $0.tag = Config.password
+                $0.title = "パスワード"
+                $0.placeholder = "入力してください"
+                $0.value = defaults.string(forKey: Config.password)
+                
+                }.onChange {row in
+                    // 内容が変更されたらUserdefaultsに書き込む
+                    self.defaults.set(row.value, forKey: Config.password)
+            }
+            
             <<< ButtonRow() {
                 $0.title = "接続テスト"
                 
@@ -65,9 +87,11 @@ class SetupViewController: FormViewController {
     
     /// DBサーバへの接続テストを行う
     func ping() {
-        let host = self.defaults.string(forKey: Config.host)
-        let influxdb = InfluxDBClient(host: URL(string: host!)!)
-        let request = PingRequest(influxdb: influxdb)
+        let host = self.defaults.string(forKey: Config.host)!
+        let user = defaults.string(forKey: Config.user)!
+        let password = defaults.string(forKey: Config.password)!
+        let influxdb = InfluxDBClient(host: URL(string: host)!, user: user, password: password)
+        let request = QueryRequest(influxdb: influxdb, query: "SHOW DATABASES")
         
         Session.send(request) { result in
             switch result {
@@ -123,6 +147,14 @@ class SetupViewController: FormViewController {
             let host = self.form.rowBy(tag: Config.host) as! TextRow
             host.value = self.defaults.string(forKey: Config.host)
             host.reload()
+            
+            let user = self.form.rowBy(tag: Config.user) as! TextRow
+            user.value = self.defaults.string(forKey: Config.user)
+            user.reload()
+            
+            let password = self.form.rowBy(tag: Config.password) as! PasswordRow
+            password.value = self.defaults.string(forKey: Config.password)
+            password.reload()
             
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
