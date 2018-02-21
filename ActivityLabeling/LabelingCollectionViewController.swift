@@ -44,12 +44,10 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     ///
     /// - Returns: 行動が一つでも選択されているかどうか
     func selectedCheck() -> Bool {
-        if let selectedItems = self.collectionView?.indexPathsForSelectedItems {
-            if !selectedItems.isEmpty {
-                return true
-            }
+        if self.selectedItems.isEmpty {
+            return false
         }
-        return false
+        return true
     }
     
     
