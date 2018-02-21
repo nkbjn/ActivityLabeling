@@ -21,6 +21,8 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     let defaults = UserDefaults.standard
     let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
     
+    var selectedItems = [Int: Bool]()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -186,6 +188,16 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let activity = activityDict[key] as! String
         cell.imageView.image = UIImage(named:"\(key)")?.withRenderingMode(.alwaysTemplate)
         cell.textLabel.text = activity
+        
+        if let _ = selectedItems[indexPath.row] {
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+            cell.isSelected = true
+            cell.iconView.backgroundColor = .flatSkyBlue
+        } else {
+            collectionView.deselectItem(at: indexPath, animated: false)
+            cell.isSelected = false
+            cell.iconView.backgroundColor = .flatBlack
+        }
     
         return cell
     }
@@ -207,7 +219,9 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
                     // 通信成功したらRealmにも保存する
                     self.labelAdd(activity: activity, status: status)
                     
+                    self.selectedItems[indexPath.row] = true
                     cell.iconView.backgroundColor = .flatSkyBlue
+                    
                     self.changeStatus()
                 } else {
                     // 通信失敗したら選択状態を元に戻す
@@ -236,6 +250,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
                     // 通信成功したらRealmにも保存する
                     self.labelAdd(activity: activity, status: status)
                     
+                    self.selectedItems.removeValue(forKey: indexPath.row)
                     cell.iconView.backgroundColor = .flatBlack
                     
                     self.changeStatus()
