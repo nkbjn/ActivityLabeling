@@ -25,9 +25,10 @@ class SetupViewController: FormViewController {
         form
             +++ Section("データベースの設定")
             
-            <<< TextRow() {
+            <<< AccountRow() {
                 $0.tag = Config.host
-                $0.title = "接続先"
+                $0.title = "ホスト名"
+                $0.placeholder = "ホスト名"
                 $0.value = defaults.string(forKey: Config.host)
                 
             }.onChange {row in
@@ -35,10 +36,24 @@ class SetupViewController: FormViewController {
                 self.defaults.set(row.value, forKey: Config.host)
             }
             
-            <<< NameRow() {
+            <<< IntRow() {
+                $0.tag = Config.port
+                $0.title = "ポート番号"
+                $0.placeholder = "ポート番号"
+                $0.value = defaults.integer(forKey: Config.port)
+                let formatter = NumberFormatter()
+                formatter.numberStyle = .none
+                $0.formatter = formatter
+                
+                }.onChange {row in
+                    // 内容が変更されたらUserdefaultsに書き込む
+                    self.defaults.set(row.value, forKey: Config.port)
+            }
+            
+            <<< AccountRow() {
                 $0.tag = Config.user
                 $0.title = "ユーザ名"
-                $0.placeholder = "入力してください"
+                $0.placeholder = "ユーザ名"
                 $0.value = defaults.string(forKey: Config.user)
                 
                 }.onChange {row in
@@ -49,7 +64,7 @@ class SetupViewController: FormViewController {
             <<< PasswordRow() {
                 $0.tag = Config.password
                 $0.title = "パスワード"
-                $0.placeholder = "入力してください"
+                $0.placeholder = "パスワード"
                 $0.value = defaults.string(forKey: Config.password)
                 
                 }.onChange {row in
@@ -87,10 +102,21 @@ class SetupViewController: FormViewController {
     
     /// DBサーバへの接続テストを行う
     func connectionTest() {
-        let host = defaults.string(forKey: Config.host)!
-        let user = defaults.string(forKey: Config.user)!
-        let password = defaults.string(forKey: Config.password)!
-        let influxdb = InfluxDBClient(host: URL(string: host)!, user: user, password: password)
+        
+        let host = defaults.string(forKey: Config.host)
+        guard (host != nil) else {
+            let alert = UIAlertController(title: "エラー",
+                                          message: "接続先ホストを入力してください",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            return
+        }
+        
+        let port = defaults.integer(forKey: Config.port)
+        let user = defaults.string(forKey: Config.user)
+        let password = defaults.string(forKey: Config.password)
+        let influxdb = InfluxDBClient(host: host!, port: port, user: user, password: password)
         let request = QueryRequest(influxdb: influxdb, query: "SHOW DATABASES")
         
         Session.send(request) { result in
@@ -135,11 +161,15 @@ class SetupViewController: FormViewController {
             DefaultConfig().reset()
             
             // 入力エリアの表示も更新する
-            let host = self.form.rowBy(tag: Config.host) as! TextRow
+            let host = self.form.rowBy(tag: Config.host) as! AccountRow
             host.value = self.defaults.string(forKey: Config.host)
             host.reload()
             
-            let user = self.form.rowBy(tag: Config.user) as! NameRow
+            let port = self.form.rowBy(tag: Config.port) as! IntRow
+            port.value = self.defaults.integer(forKey: Config.port)
+            port.reload()
+            
+            let user = self.form.rowBy(tag: Config.user) as! AccountRow
             user.value = self.defaults.string(forKey: Config.user)
             user.reload()
             

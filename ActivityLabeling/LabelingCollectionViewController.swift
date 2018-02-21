@@ -116,7 +116,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         fields["activity"] = activity
         fields["status"] = status ? 1:0
         
-        let influxdb = InfluxDBClient(host: URL(string: host)!, user: user, password: password)
+        let influxdb = InfluxDBClient(host: host, user: user, password: password)
         let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: [:], fields: fields)
         
         Session.send(request) { result in

@@ -16,7 +16,7 @@ extension InfluxDBRequest {
     typealias Response = InfluxDBResponse
     
     var baseURL: URL {
-        return self.influxdb.host
+        return URL(string: "http://\(self.influxdb.host):\(String(describing: self.influxdb.port))")!
     }
     
     // 異常終了時はJSONが返ってくるので、InfluxDBErrorでパースさせる
