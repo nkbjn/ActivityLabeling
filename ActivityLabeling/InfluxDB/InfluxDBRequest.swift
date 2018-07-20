@@ -8,12 +8,11 @@
 
 import APIKit
 
-protocol InfluxDBRequest: Request {
+protocol InfluxDBRequest: Request where Response == InfluxDBResponse {
     var influxdb: InfluxDBClient { get }
 }
 
 extension InfluxDBRequest {
-    typealias Response = InfluxDBResponse
     
     var baseURL: URL {
         return URL(string: "http://\(self.influxdb.host):\(String(describing: self.influxdb.port))")!
