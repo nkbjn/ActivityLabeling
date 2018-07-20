@@ -18,7 +18,9 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
     let database = UserDefaults.standard.string(forKey: Config.database)!
     let measurement = UserDefaults.standard.string(forKey: Config.measurement)!
+    let ssl = UserDefaults.standard.bool(forKey: Config.ssl)
     let host = UserDefaults.standard.string(forKey: Config.host)!
+    let port = UserDefaults.standard.integer(forKey: Config.port)
     let user = UserDefaults.standard.string(forKey: Config.user)!
     let password = UserDefaults.standard.string(forKey: Config.password)!
     
@@ -117,7 +119,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         var fields: [String: Any] = [:]
         fields["status"] = status ? 1:0
         
-        let influxdb = InfluxDBClient(host: host, user: user, password: password)
+        let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
         let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: tags, fields: fields)
         
         Session.send(request) { result in

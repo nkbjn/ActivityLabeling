@@ -18,13 +18,15 @@ open class InfluxDBClient {
     public let user: String?
     public let password: String?
     public let database: String?
+    public let ssl: Bool
     
-    public init(host: String, port: Int = 8086, user: String? = nil, password: String? = nil, database: String? = nil) {
+    public init(host: String, port: Int = 8086, user: String? = nil, password: String? = nil, database: String? = nil, ssl: Bool = false) {
         self.host = host
         self.port = port
         self.user = user
         self.password = password
         self.database = database
+        self.ssl = ssl
     }
     
 }

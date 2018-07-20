@@ -10,6 +10,7 @@
 /// 設定をUserDefaultに保存するときのKey
 struct Config {
     
+    static let ssl = "ssl"
     static let host = "host"
     static let port = "port"
     static let user = "user"

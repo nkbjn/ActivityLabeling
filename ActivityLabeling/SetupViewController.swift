@@ -25,6 +25,16 @@ class SetupViewController: FormViewController {
         form
             +++ Section("データベースの設定")
             
+            <<< SwitchRow() {
+                $0.tag = Config.ssl
+                $0.title = "SSL"
+                $0.value = defaults.bool(forKey: Config.ssl)
+                
+            }.onChange {row in
+                // 内容が変更されたらUserdefaultsに書き込む
+                self.defaults.set(row.value, forKey: Config.ssl)
+            }
+            
             <<< AccountRow() {
                 $0.tag = Config.host
                 $0.title = "ホスト名"
@@ -116,7 +126,8 @@ class SetupViewController: FormViewController {
         let port = defaults.integer(forKey: Config.port)
         let user = defaults.string(forKey: Config.user)
         let password = defaults.string(forKey: Config.password)
-        let influxdb = InfluxDBClient(host: host!, port: port, user: user, password: password)
+        let ssl = defaults.bool(forKey: Config.ssl)
+        let influxdb = InfluxDBClient(host: host!, port: port, user: user, password: password, ssl: ssl)
         let request = QueryRequest(influxdb: influxdb, query: "SHOW DATABASES")
         
         Session.send(request) { result in

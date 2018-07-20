@@ -15,7 +15,11 @@ protocol InfluxDBRequest: Request where Response == InfluxDBResponse {
 extension InfluxDBRequest {
     
     var baseURL: URL {
-        return URL(string: "http://\(self.influxdb.host):\(String(describing: self.influxdb.port))")!
+        if self.influxdb.ssl {
+            return URL(string: "https://\(self.influxdb.host):\(String(describing: self.influxdb.port))")!
+        }else{
+            return URL(string: "http://\(self.influxdb.host):\(String(describing: self.influxdb.port))")!
+        }
     }
     
     // 異常終了時はJSONが返ってくるので、InfluxDBErrorでパースさせる
