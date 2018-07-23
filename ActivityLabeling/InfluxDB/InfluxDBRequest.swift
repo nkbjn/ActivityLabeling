@@ -37,11 +37,15 @@ extension InfluxDBRequest {
     
     func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
         
-        guard let data = object as? Data else {
-            throw ResponseError.unexpectedObject(object)
+        if urlResponse.statusCode == 204 {
+            return .noContent
         }
-        return try JSONDecoder().decode(Response.self, from: data)
         
+        if let data = object as? Data {
+            return .results(try JSONDecoder().decode(InfluxDB.self, from: data))
+        }
+
+        return .unknown(object)
     }
     
     // 異常終了時はJSONが返ってくるので、InfluxDBErrorでパースさせる

@@ -6,8 +6,15 @@
 //  Copyright © 2018年 Wataru Sasaki. All rights reserved.
 //
 
-struct InfluxDBResponse: Codable {
-    var results: [Result]
+enum InfluxDBResponse {
+    case noContent
+    case results(InfluxDB)
+    case unknown(Any)
+}
+
+
+struct InfluxDB: Codable {
+    var results: [Result]?
     
     struct Result: Codable {
         var statementId: Int
