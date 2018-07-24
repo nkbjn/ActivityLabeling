@@ -7,15 +7,13 @@
 //
 
 import UIKit
-import RealmSwift
-
+import APIKit
 
 /// ラベリングの履歴を表示するTableViewController
 class HistoryTableViewController: UITableViewController {
     
-    let realm = try! Realm()
-    var labelings: Results<Labeling>!   // ラベリング履歴
     var selectedID: String?             // 選択したラベリングID
+    var labelList = [[String: Any]()]
 
     
     override func viewDidLoad() {
@@ -24,11 +22,51 @@ class HistoryTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // ラベリング時間で降順にソートする
-        labelings = realm.objects(Labeling.self).sorted(byKeyPath: "startTime", ascending: false)
         
-        // タブ切り替え時に再読み込みされるようにする
-        tableView.reloadData()
+        self.labelList.removeAll()
+        self.tableView.reloadData()
+        
+        let database = UserDefaults.standard.string(forKey: Config.database)!
+        let ssl = UserDefaults.standard.bool(forKey: Config.ssl)
+        let host = UserDefaults.standard.string(forKey: Config.host)!
+        let port = UserDefaults.standard.integer(forKey: Config.port)
+        let user = UserDefaults.standard.string(forKey: Config.user)!
+        let password = UserDefaults.standard.string(forKey: Config.password)!
+        
+        let query = "SELECT * FROM label WHERE \"user\"='\(user)'"
+        let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
+        let request = QueryRequest(influxdb: influxdb, query: query, database: database)
+
+        Session.send(request) { result in
+            switch result {
+            case let .success(.results(value)):
+                if let results = value.results {
+                    for result in results {
+                        if let series = result.series {
+                            for s in series {
+                                for v in s.values {
+                                    self.labelList.append(zip(s.columns, v).reduce(into: [String: Any]()) { $0[$1.0] = $1.1 })
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                self.tableView.reloadData()
+            
+            case .success(.noContent):
+                break
+            case .success(.unknown(_)):
+                break
+
+            case .failure(let error):
+                let alert = UIAlertController(title: "通信エラー", message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            
+            }
+        }
+        
     }
 
     // MARK: - Table view data source
@@ -38,45 +76,35 @@ class HistoryTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return labelings.count
+        return self.labelList.count
+    }
+    
+    func convertString(arg: StringOrIntType) -> String {
+        switch arg {
+        case let .string(str):
+            return str
+        case let .int(int):
+            return String(int)
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        let labeling = labelings[indexPath.row]
+        let dict = self.labelList[indexPath.row]
         
-        // メインはラベリング開始時間
-        let f = DateFormatter()
-        f.dateStyle = .medium
-        f.timeStyle = .medium
-        f.locale = Locale(identifier: "ja_JP")
-        cell.textLabel?.text = "\(f.string(from: labeling.startTime)) 〜"
+        if let activity = dict["activity"] as? StringOrIntType,
+            let status = dict["status"] as? StringOrIntType {
+            let activityStr = convertString(arg: activity)
+            let statusStr = convertString(arg: status) == "1" ? "Start": "End"
+            cell.textLabel?.text = "\(activityStr)：\(statusStr)"
+        }
         
-        // 詳細は接続ホスト
-        cell.detailTextLabel?.text = "\(labeling.host)"
-        
-        // タッチできることをわかりやすくする
-        cell.accessoryType = .disclosureIndicator
+        if let time = dict["time"] as? StringOrIntType {
+            cell.detailTextLabel?.text = convertString(arg: time)
+        }
         
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 選択したラベリングのIDを取得する
-        let labeling = labelings[indexPath.row]
-        selectedID = labeling.id
-        
-        // LabelTableViewControllerに遷移
-        performSegue(withIdentifier: "LabelTableViewControllerSegue", sender: nil)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "LabelTableViewControllerSegue" {
-            // どの履歴をタップしたのかを保存する
-            let vc = segue.destination as! LabelTableViewController
-            vc.id = selectedID
-        }
     }
 
 }
