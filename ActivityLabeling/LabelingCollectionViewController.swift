@@ -13,7 +13,7 @@ private let reuseIdentifier = "Cell"
 
 class LabelingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
+    let activities = UserDefaults.standard.array(forKey: Config.activities)!
     let database = UserDefaults.standard.string(forKey: Config.database)!
     let measurement = UserDefaults.standard.string(forKey: Config.measurement)!
     let ssl = UserDefaults.standard.bool(forKey: Config.ssl)
@@ -152,16 +152,15 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return activityDict.count
+        return activities.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! LabelingCollectionViewCell
     
         // Configure the cell
-        let key = Array(activityDict.keys)[indexPath.row]
-        let activity = activityDict[key] as! String
-        cell.imageView.image = UIImage(named:"\(key)")?.withRenderingMode(.alwaysTemplate)
+        let activity = activities[indexPath.row] as! String
+        cell.imageView.image = UIImage(named: activity)?.withRenderingMode(.alwaysTemplate)
         cell.textLabel.text = activity
         
         if let _ = selectedItems[indexPath.row] {
@@ -182,24 +181,24 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
-        let activity = Array(activityDict.keys)[indexPath.row]
-        let activityName = activityDict[activity] as! String
+        let activity = activities[indexPath.row] as! String
         let status = cell.isSelected
         
-        let massage = "Would you like to start \(activityName)?"
+        let massage = "Would you like to start \(activity)?"
         let alert = UIAlertController(title: "Start Activity", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Start", style: .default, handler: { action in
             self.sendLabel(activity: activity, status: status, handler: { response in
-                if response {
-                    
-                    self.selectedItems[indexPath.row] = true
-                    cell.iconView.backgroundColor = .flatSkyBlue
-                    
-                    self.changeStatus()
-                } else {
+                
+                guard response else {
                     // 通信失敗したら選択状態を元に戻す
                     collectionView.deselectItem(at: indexPath, animated: true)
+                    return
                 }
+                
+                self.selectedItems[indexPath.row] = true
+                cell.iconView.backgroundColor = .flatSkyBlue
+                
+                self.changeStatus()
             })
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
@@ -211,11 +210,10 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
-        let activity = Array(activityDict.keys)[indexPath.row]
-        let activityName = activityDict[activity] as! String
+        let activity = activities[indexPath.row] as! String
         let status = cell.isSelected
         
-        let massage = "Would you like to finish \(activityName)?"
+        let massage = "Would you like to finish \(activity)?"
         let alert = UIAlertController(title: "Finish Activity", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Finish", style: .default, handler: { action in
             self.sendLabel(activity: activity, status: status, handler: { response in

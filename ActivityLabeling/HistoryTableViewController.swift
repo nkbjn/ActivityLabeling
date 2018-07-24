@@ -98,7 +98,7 @@ class HistoryTableViewController: UITableViewController {
         if let activity = dict["activity"] as? StringOrIntType,
             let status = dict["status"] as? StringOrIntType {
             let activityStr = convertString(arg: activity)
-            let statusStr = convertString(arg: status) == "1" ? "Start": "End"
+            let statusStr = convertString(arg: status) == "1" ? "Start": "Finish"
             cell.textLabel?.text = "\(activityStr)：\(statusStr)"
         }
         
