@@ -10,11 +10,11 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--履歴-->
+        <!--History-->
         <scene sceneID="yQg-Gw-MiF">
             <objects>
                 <navigationController id="CcW-Z4-iBd" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="履歴" image="history" id="5f9-Jr-yBp"/>
+                    <tabBarItem key="tabBarItem" title="History" image="history" id="5f9-Jr-yBp"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="gVe-Gp-mfu">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -84,7 +84,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="" id="toK-d5-Fio"/>
                     <navigationItem key="navigationItem" id="RqK-2b-qUQ">
-                        <barButtonItem key="rightBarButtonItem" title="初期化" id="eec-LO-v1w">
+                        <barButtonItem key="rightBarButtonItem" title="Initialize" id="eec-LO-v1w">
                             <connections>
                                 <action selector="resetConfig:" destination="L1o-Te-wEB" id="zhd-gF-jYq"/>
                             </connections>
@@ -142,7 +142,7 @@
                         <viewLayoutGuide key="safeArea" id="Oi8-vE-StM"/>
                     </view>
                     <navigationItem key="navigationItem" id="qIP-hk-xlM">
-                        <barButtonItem key="rightBarButtonItem" title="終了" id="skJ-qM-2Er">
+                        <barButtonItem key="rightBarButtonItem" title="Finish" id="skJ-qM-2Er">
                             <connections>
                                 <action selector="exit:" destination="fZ5-qI-0h4" id="wGS-Ol-oRD"/>
                             </connections>
@@ -219,11 +219,11 @@
             </objects>
             <point key="canvasLocation" x="825" y="-745"/>
         </scene>
-        <!--ラベリング-->
+        <!--Labeling-->
         <scene sceneID="sBT-pH-P9k">
             <objects>
                 <navigationController id="VQC-VQ-9Qh" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="ラベリング" image="labeling" id="sTu-t4-6xH"/>
+                    <tabBarItem key="tabBarItem" title="Labeling" image="labeling" id="sTu-t4-6xH"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="4rQ-QM-h0G">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
