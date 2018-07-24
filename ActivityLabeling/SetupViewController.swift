@@ -171,7 +171,7 @@ class SetupViewController: FormViewController {
     
     // 設定を初期設定に戻す
     @IBAction func resetConfig(_ sender: Any) {
-        let alert = UIAlertController(title: "Initialize settings", message: "Do you really want to initialize sttings?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Initialize settings", message: "Do you really want to initialize settings?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
             
             // 初期設定に戻す
