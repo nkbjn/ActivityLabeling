@@ -8,7 +8,6 @@
 
 import UIKit
 import Eureka
-import RealmSwift
 import APIKit
 
 
