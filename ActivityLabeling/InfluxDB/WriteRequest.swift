@@ -73,7 +73,7 @@ class WriteRequest: InfluxDBRequest {
         
         func buildEntity() throws -> RequestBodyEntity {
             let t_param = request.tags.map { "\($0)=\($1)" }
-            let tim = (request.time != nil) ? " \(request.time!)" : ""
+            let tim = (request.time != nil) ? " \(UInt64(request.time!))" : ""
             
             let params = "\(([request.measurement] + t_param).joined(separator: ",")) \(fieldsStr)\(tim)"
             

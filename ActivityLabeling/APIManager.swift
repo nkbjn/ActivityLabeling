@@ -60,7 +60,7 @@ class APIManager: NSObject {
     ///   - activity: 行動
     ///   - status: 行動の状態
     ///   - handler: 送信結果を返却する
-    func write(activity: String, status: Bool, handler: @escaping (Error?) -> ()) {
+    func write(time: Date, activity: String, status: Bool, handler: @escaping (Error?) -> ()) {
         
         paramLoad()
         
@@ -69,9 +69,10 @@ class APIManager: NSObject {
         tags["activity"] = activity
         var fields: [String: Any] = [:]
         fields["status"] = status ? 1:0
+        let timeInterval = time.timeIntervalSince1970 * 1000000000 // ナノ秒に変更
         
         let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
-        let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: tags, fields: fields)
+        let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: tags, fields: fields, time: timeInterval)
         
         Session.send(request) { result in
             switch result {

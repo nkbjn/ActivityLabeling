@@ -142,11 +142,12 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
         let activity = activities[indexPath.row] as! String
         let status = cell.isSelected
+        let time = Date()
         
         let massage = "Would you like to start \(activity)?"
         let alert = UIAlertController(title: "Start Activity", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Start", style: .default, handler: { action in
-            self.api.write(activity: activity, status: status, handler: { error in
+            self.api.write(time: time, activity: activity, status: status, handler: { error in
                 
                 guard (error == nil) else {
                     // 通信失敗したら選択状態を元に戻す
@@ -175,11 +176,12 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
         let activity = activities[indexPath.row] as! String
         let status = cell.isSelected
+        let time = Date()
         
         let massage = "Would you like to finish \(activity)?"
         let alert = UIAlertController(title: "Finish Activity", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Finish", style: .default, handler: { action in
-            self.api.write(activity: activity, status: status, handler: { error in
+            self.api.write(time: time, activity: activity, status: status, handler: { error in
                 
                 guard (error == nil) else {
                     // 通信失敗したら選択状態を元に戻す
