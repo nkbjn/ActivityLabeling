@@ -8,13 +8,11 @@
 
 import UIKit
 import APIKit
-import RealmSwift
 
 private let reuseIdentifier = "Cell"
 
 class LabelingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    let realm = try! Realm()
     let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
     let database = UserDefaults.standard.string(forKey: Config.database)!
     let measurement = UserDefaults.standard.string(forKey: Config.measurement)!
@@ -38,7 +36,6 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        createLabeling()
         changeStatus()
     }
     
@@ -72,40 +69,6 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     
-    /// Realmにラベリングデータを作成する
-    func createLabeling() {
-        let labeling = Labeling()
-        
-        // 行動選択時にラベルデータを追加するために変数に代入しておく
-        id = labeling.id
-        
-        labeling.host = host
-        
-        try! realm.write {
-            realm.add(labeling)
-        }
-    }
-    
-    
-    /// Realmのラベリングデータにラベルデータを追加する
-    ///
-    /// - Parameters:
-    ///   - activity: 追加する行動
-    ///   - status: 追加する行動の状態
-    func addLabel(activity: String, status: Bool) {
-        // ラベリングデータをIDから検索する
-        let labeling = realm.object(ofType: Labeling.self, forPrimaryKey: id)
-        
-        let label = Label()
-        label.activity = activity
-        label.status = status
-        
-        try! realm.write {
-            labeling?.labels.append(label)
-        }
-    }
-    
-    
     /// DBサーバにラベルデータを送信する
     ///
     /// - Parameters:
@@ -115,6 +78,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     func sendLabel(activity: String, status: Bool, handler: @escaping (Bool) -> ()) {
         
         var tags: [String: String] = [:]
+        tags["user"] = user
         tags["activity"] = activity
         var fields: [String: Any] = [:]
         fields["status"] = status ? 1:0
@@ -225,8 +189,6 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         alert.addAction(UIAlertAction(title: "開始", style: .default, handler: { action in
             self.sendLabel(activity: activity, status: status, handler: { response in
                 if response {
-                    // 通信成功したらRealmにも保存する
-                    self.addLabel(activity: activity, status: status)
                     
                     self.selectedItems[indexPath.row] = true
                     cell.iconView.backgroundColor = .flatSkyBlue
@@ -261,9 +223,6 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
                     collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
                     return
                 }
-                
-                // 通信成功したらRealmにも保存する
-                self.addLabel(activity: activity, status: status)
                 
                 self.selectedItems.removeValue(forKey: indexPath.row)
                 cell.iconView.backgroundColor = .flatBlack
