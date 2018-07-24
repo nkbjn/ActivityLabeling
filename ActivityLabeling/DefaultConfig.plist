@@ -13,43 +13,43 @@
 	<key>activityDict</key>
 	<dict>
 		<key>cook</key>
-		<string>料理</string>
+		<string>Cooking</string>
 		<key>eat</key>
-		<string>食事</string>
+		<string>Eating</string>
 		<key>clean_room</key>
-		<string>部屋掃除</string>
+		<string>CleaningRoom</string>
 		<key>bath</key>
-		<string>入浴</string>
+		<string>Bathing</string>
 		<key>sleep</key>
-		<string>睡眠</string>
+		<string>Sleeping</string>
 		<key>read_book</key>
-		<string>読書</string>
+		<string>ReadingBook</string>
 		<key>wash_face</key>
-		<string>洗顔</string>
+		<string>WashingFace</string>
 		<key>wash_dishes</key>
-		<string>食器洗い</string>
+		<string>WashingDishes</string>
 		<key>watch_tv</key>
-		<string>TV視聴</string>
+		<string>WatchingTelevision</string>
 		<key>clean_bath</key>
-		<string>風呂掃除</string>
+		<string>CleaningBathroom</string>
 		<key>work_on_pc</key>
-		<string>PC作業</string>
+		<string>WorkingOnPC</string>
 		<key>dress</key>
-		<string>着替え</string>
+		<string>Dressing</string>
 		<key>go_outside</key>
-		<string>外出</string>
+		<string>GoingOut</string>
 		<key>laundry</key>
-		<string>洗濯</string>
+		<string>Laundry</string>
 		<key>play_game</key>
-		<string>TVゲーム</string>
+		<string>PlayingGame</string>
 		<key>use_phone</key>
-		<string>スマホ操作</string>
+		<string>PlayingSmartphone</string>
 		<key>brush_teeth</key>
-		<string>歯磨き</string>
+		<string>BrushingTeeth</string>
 		<key>makeup</key>
-		<string>化粧</string>
+		<string>MakingUp</string>
 		<key>other</key>
-		<string>定義外行動</string>
+		<string>Other</string>
 	</dict>
 </dict>
 </plist>
