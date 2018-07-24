@@ -62,7 +62,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         } else {
             // 行動が選択されていなければステータスを未選択に変える
             navigationController?.navigationBar.barTintColor = .flatRed
-            title = "行動未選択"
+            title = "Unselected"
         }
     }
     
@@ -92,9 +92,9 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
                 case .success:
                     handler(true)
                     
-                case .failure:
+                case .failure(let error):
                     handler(false)
-                    let alert = UIAlertController(title: "通信エラー", message: "通信に失敗しました", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true)
                 }
@@ -108,8 +108,8 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         guard !selected() else {
             // 行動を選択している状態で終了しようとした場合
-            let alert = UIAlertController(title: "エラー",
-                                          message: "全ての行動を終了させてください",
+            let alert = UIAlertController(title: "Error",
+                                          message: "Please finish all activities.",
                                           preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true)
@@ -117,10 +117,10 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
         
         // 誤って終了してしまうのを防ぐためにアラートを表示
-        let alert = UIAlertController(title: "ラベリング終了",
-                                      message: "本当に終了してよろしいですか？",
+        let alert = UIAlertController(title: "Finish Labeling",
+                                      message: "Would you like to finish labeling?",
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "終了",
+        alert.addAction(UIAlertAction(title: "Finish",
                                       style: .default,
                                       handler: { action in
                                         self.dismiss(animated: true, completion: nil)
@@ -186,9 +186,9 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let activityName = activityDict[activity] as! String
         let status = cell.isSelected
         
-        let massage = "\(activityName)を開始しますか？"
-        let alert = UIAlertController(title: "行動開始", message: massage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "開始", style: .default, handler: { action in
+        let massage = "Would you like to start \(activityName)?"
+        let alert = UIAlertController(title: "Start Activity", message: massage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Start", style: .default, handler: { action in
             self.sendLabel(activity: activity, status: status, handler: { response in
                 if response {
                     
@@ -215,9 +215,9 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let activityName = activityDict[activity] as! String
         let status = cell.isSelected
         
-        let massage = "\(activityName)を終了しますか？"
-        let alert = UIAlertController(title: "行動終了", message: massage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "終了", style: .default, handler: { action in
+        let massage = "Would you like to finish \(activityName)?"
+        let alert = UIAlertController(title: "Finish Activity", message: massage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Finish", style: .default, handler: { action in
             self.sendLabel(activity: activity, status: status, handler: { response in
                 
                 guard response else {
