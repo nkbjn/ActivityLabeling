@@ -25,39 +25,39 @@ struct InfluxDB: Codable {
             case statementId = "statement_id"
             case series
         }
+    }
+}
 
-        struct Series: Codable {
-            var name: String
-            var columns: [String]
-            var values: [[StringOrIntType]]
+struct Series: Codable {
+    var name: String
+    var columns: [String]
+    var values: [[StringOrIntType]]
+}
 
-            enum StringOrIntType: Codable {
-                case string(String)
-                case int(Int)
-
-                init(from decoder: Decoder) throws {
-                    let container = try decoder.singleValueContainer()
-                    do {
-                        self = try .string(container.decode(String.self))
-                    } catch DecodingError.typeMismatch {
-                        do {
-                            self = try .int(container.decode(Int.self))
-                        } catch DecodingError.typeMismatch {
-                            throw DecodingError.typeMismatch(StringOrIntType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Encoded payload not of an expected type"))
-                        }
-                    }
-                }
-
-                func encode(to encoder: Encoder) throws {
-                    var container = encoder.singleValueContainer()
-                    switch self {
-                    case .int(let int):
-                        try container.encode(int)
-                    case .string(let string):
-                        try container.encode(string)
-                    }
-                }
+enum StringOrIntType: Codable {
+    case string(String)
+    case int(Int)
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        do {
+            self = try .string(container.decode(String.self))
+        } catch DecodingError.typeMismatch {
+            do {
+                self = try .int(container.decode(Int.self))
+            } catch DecodingError.typeMismatch {
+                throw DecodingError.typeMismatch(StringOrIntType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Encoded payload not of an expected type"))
             }
+        }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .int(let int):
+            try container.encode(int)
+        case .string(let string):
+            try container.encode(string)
         }
     }
 }
