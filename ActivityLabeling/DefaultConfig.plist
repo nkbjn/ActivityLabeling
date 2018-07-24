@@ -12,25 +12,23 @@
 	<string>label</string>
 	<key>activities</key>
 	<array>
+		<string>PersonalHygiene</string>
 		<string>Cooking</string>
 		<string>Eating</string>
-		<string>CleaningRoom</string>
-		<string>Bathing</string>
-		<string>Sleeping</string>
-		<string>ReadingBook</string>
-		<string>WashingFace</string>
 		<string>WashingDishes</string>
-		<string>WatchingTelevision</string>
+		<string>GoingRestroom</string>
+		<string>Bathing</string>
+		<string>CleaningRoom</string>
 		<string>CleaningBathroom</string>
+		<string>Laundry</string>
 		<string>WorkingOnPC</string>
+		<string>WatchingTelevision</string>
+		<string>PlayingGame</string>
+		<string>ReadingBook</string>
+		<string>UsingSmartphone</string>
+		<string>Sleeping</string>
 		<string>Dressing</string>
 		<string>GoingOut</string>
-		<string>Laundry</string>
-		<string>PlayingGame</string>
-		<string>UsingSmartphone</string>
-		<string>BrushingTeeth</string>
-		<string>MakingUp</string>
-		<string>Other</string>
 	</array>
 </dict>
 </plist>
