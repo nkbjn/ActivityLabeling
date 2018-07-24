@@ -90,5 +90,39 @@ class HistoryTableViewController: UITableViewController {
         
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let dict = self.labelList[indexPath.row]
+        
+        guard let time = dict["time"] as? StringOrIntType else {
+            return
+        }
+        guard let activity = dict["activity"] as? StringOrIntType else {
+            return
+        }
+        guard let status = dict["status"] as? StringOrIntType else {
+            return
+        }
+        let timeStr = convertString(arg: time)
+        let activityStr = convertString(arg: activity)
+        let statusStr = convertString(arg: status)
+        let massage = "Would you like to delete \(activityStr):\(statusStr == "1" ? "Start": "Finish")?"
+        let alert = UIAlertController(title: "Delete Label", message: massage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { action in
+            
+            self.api.drop(time: timeStr, handler: { error in
+                
+                guard (error == nil) else {
+                    let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                    return
+                }
+                self.reload()
+            })
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true)
+    }
 
 }
