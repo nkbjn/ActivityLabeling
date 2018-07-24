@@ -8,7 +8,6 @@
 
 import UIKit
 import Eureka
-import RealmSwift
 import APIKit
 
 
@@ -64,22 +63,26 @@ class SetupViewController: FormViewController {
                 $0.tag = Config.user
                 $0.title = "ユーザ名"
                 $0.placeholder = "ユーザ名"
-                $0.value = defaults.string(forKey: Config.user)
+                if let value = Keychain.user.value() {
+                    $0.value = value
+                }
                 
                 }.onChange {row in
-                    // 内容が変更されたらUserdefaultsに書き込む
-                    self.defaults.set(row.value, forKey: Config.user)
+                    // 内容が変更されたらKeyChainに書き込む
+                    Keychain.user.set(row.value ?? "")
             }
             
             <<< PasswordRow() {
                 $0.tag = Config.password
                 $0.title = "パスワード"
                 $0.placeholder = "パスワード"
-                $0.value = defaults.string(forKey: Config.password)
+                if let value = Keychain.password.value() {
+                    $0.value = value
+                }
                 
                 }.onChange {row in
-                    // 内容が変更されたらUserdefaultsに書き込む
-                    self.defaults.set(row.value, forKey: Config.password)
+                    // 内容が変更されたらKeyChainに書き込む
+                    Keychain.password.set(row.value ?? "")
             }
             
             <<< ButtonRow() {
@@ -124,28 +127,31 @@ class SetupViewController: FormViewController {
         }
         
         let port = defaults.integer(forKey: Config.port)
-        let user = defaults.string(forKey: Config.user)
-        let password = defaults.string(forKey: Config.password)
         let ssl = defaults.bool(forKey: Config.ssl)
-        let influxdb = InfluxDBClient(host: host!, port: port, user: user, password: password, ssl: ssl)
-        let request = QueryRequest(influxdb: influxdb, query: "SHOW DATABASES")
         
-        Session.send(request) { result in
-            switch result {
-            case .success:
-                let alert = UIAlertController(title: "通信成功",
-                                              message: "正常に通信ができることを確認しました",
-                                              preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true)
-                
-            case .failure(let error):
-                let alert = UIAlertController(title: "通信エラー",
-                                              message: error.localizedDescription,
-                                              preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true)
-                
+        if let user = Keychain.user.value(),
+            let password = Keychain.password.value() {
+            
+            let influxdb = InfluxDBClient(host: host!, port: port, user: user, password: password, ssl: ssl)
+            let request = QueryRequest(influxdb: influxdb, query: "SHOW DATABASES")
+            
+            Session.send(request) { result in
+                switch result {
+                case .success:
+                    let alert = UIAlertController(title: "通信成功",
+                                                  message: "正常に通信ができることを確認しました",
+                                                  preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                    
+                case .failure(let error):
+                    let alert = UIAlertController(title: "通信エラー",
+                                                  message: error.localizedDescription,
+                                                  preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                    
+                }
             }
         }
     }
@@ -181,11 +187,11 @@ class SetupViewController: FormViewController {
             port.reload()
             
             let user = self.form.rowBy(tag: Config.user) as! AccountRow
-            user.value = self.defaults.string(forKey: Config.user)
+            user.value = ""
             user.reload()
             
             let password = self.form.rowBy(tag: Config.password) as! PasswordRow
-            password.value = self.defaults.string(forKey: Config.password)
+            password.value = ""
             password.reload()
             
         }))

@@ -19,8 +19,6 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     let ssl = UserDefaults.standard.bool(forKey: Config.ssl)
     let host = UserDefaults.standard.string(forKey: Config.host)!
     let port = UserDefaults.standard.integer(forKey: Config.port)
-    let user = UserDefaults.standard.string(forKey: Config.user)!
-    let password = UserDefaults.standard.string(forKey: Config.password)!
     
     @IBOutlet var collectionView: UICollectionView!
     
@@ -77,25 +75,29 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     ///   - handler: 送信結果を返却する
     func sendLabel(activity: String, status: Bool, handler: @escaping (Bool) -> ()) {
         
-        var tags: [String: String] = [:]
-        tags["user"] = user
-        tags["activity"] = activity
-        var fields: [String: Any] = [:]
-        fields["status"] = status ? 1:0
+        if let user = Keychain.user.value(),
+            let password = Keychain.password.value() {
         
-        let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
-        let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: tags, fields: fields)
-        
-        Session.send(request) { result in
-            switch result {
-            case .success:
-                handler(true)
-                
-            case .failure:
-                handler(false)
-                let alert = UIAlertController(title: "通信エラー", message: "通信に失敗しました", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true)
+            var tags: [String: String] = [:]
+            tags["user"] = user
+            tags["activity"] = activity
+            var fields: [String: Any] = [:]
+            fields["status"] = status ? 1:0
+            
+            let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
+            let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: tags, fields: fields)
+            
+            Session.send(request) { result in
+                switch result {
+                case .success:
+                    handler(true)
+                    
+                case .failure:
+                    handler(false)
+                    let alert = UIAlertController(title: "通信エラー", message: "通信に失敗しました", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                }
             }
         }
     }
