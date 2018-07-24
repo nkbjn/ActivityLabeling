@@ -26,47 +26,49 @@ class HistoryTableViewController: UITableViewController {
         self.labelList.removeAll()
         self.tableView.reloadData()
         
-        let database = UserDefaults.standard.string(forKey: Config.database)!
-        let ssl = UserDefaults.standard.bool(forKey: Config.ssl)
-        let host = UserDefaults.standard.string(forKey: Config.host)!
-        let port = UserDefaults.standard.integer(forKey: Config.port)
-        let user = UserDefaults.standard.string(forKey: Config.user)!
-        let password = UserDefaults.standard.string(forKey: Config.password)!
-        
-        let query = "SELECT * FROM label WHERE \"user\"='\(user)'"
-        let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
-        let request = QueryRequest(influxdb: influxdb, query: query, database: database)
-
-        Session.send(request) { result in
-            switch result {
-            case let .success(.results(value)):
-                if let results = value.results {
-                    for result in results {
-                        if let series = result.series {
-                            for s in series {
-                                for v in s.values {
-                                    self.labelList.append(zip(s.columns, v).reduce(into: [String: Any]()) { $0[$1.0] = $1.1 })
+        if let user = Keychain.user.value(),
+            let password = Keychain.password.value() {
+            
+            let database = UserDefaults.standard.string(forKey: Config.database)!
+            let ssl = UserDefaults.standard.bool(forKey: Config.ssl)
+            let host = UserDefaults.standard.string(forKey: Config.host)!
+            let port = UserDefaults.standard.integer(forKey: Config.port)
+            
+            let query = "SELECT * FROM label WHERE \"user\"='\(user)'"
+            let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
+            let request = QueryRequest(influxdb: influxdb, query: query, database: database)
+            
+            Session.send(request) { result in
+                switch result {
+                case let .success(.results(value)):
+                    if let results = value.results {
+                        for result in results {
+                            if let series = result.series {
+                                for s in series {
+                                    for v in s.values {
+                                        self.labelList.append(zip(s.columns, v).reduce(into: [String: Any]()) { $0[$1.0] = $1.1 })
+                                    }
                                 }
                             }
                         }
                     }
+                    
+                    self.tableView.reloadData()
+                    
+                case .success(.noContent):
+                    break
+                case .success(.unknown(_)):
+                    break
+                    
+                case .failure(let error):
+                    let alert = UIAlertController(title: "通信エラー", message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                    
                 }
-                
-                self.tableView.reloadData()
-            
-            case .success(.noContent):
-                break
-            case .success(.unknown(_)):
-                break
-
-            case .failure(let error):
-                let alert = UIAlertController(title: "通信エラー", message: error.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true)
-            
             }
+            
         }
-        
     }
 
     // MARK: - Table view data source
