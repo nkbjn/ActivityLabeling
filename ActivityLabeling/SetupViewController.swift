@@ -93,14 +93,6 @@ class SetupViewController: FormViewController {
             }
             
             
-            +++ Section("ラベリングする行動")
-            
-            <<< ButtonRow() {
-                $0.title = "対象行動の確認"
-                $0.presentationMode = .segueName(segueName: "ActivityTableViewControllerControllerSegue", onDismiss: nil)
-            }
-            
-            
             +++ Section()
             
             <<< ButtonRow() {
@@ -199,37 +191,4 @@ class SetupViewController: FormViewController {
         present(alert, animated: true)
     }
     
-}
-
-
-/// ラベリング行動確認画面
-class ActivityTableViewController: UITableViewController {
-    
-    let activityDict = UserDefaults.standard.dictionary(forKey: Config.activityDict)!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = "行動ラベル"
-    }
-    
-    // MARK: - Table view data source
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return activityDict.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
-        let key = Array(activityDict.keys)[indexPath.row]
-        let activity = activityDict[key] as! String
-        cell.textLabel?.text = activity
-        
-        return cell
-    }
-
 }

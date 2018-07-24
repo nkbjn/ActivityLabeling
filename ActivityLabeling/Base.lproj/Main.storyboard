@@ -92,7 +92,6 @@
                     </navigationItem>
                     <connections>
                         <segue destination="7Wp-iA-h5L" kind="presentation" identifier="LabelingViewControllerSegue" modalTransitionStyle="crossDissolve" id="lWd-Cq-KOF"/>
-                        <segue destination="013-bf-DsZ" kind="show" identifier="ActivityTableViewControllerControllerSegue" id="HFS-SD-ocJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="swi-nI-bEh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -154,7 +153,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xSP-HT-nx6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3055" y="-54"/>
+            <point key="canvasLocation" x="1759" y="-412"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="0lN-JI-vf6">
@@ -170,7 +169,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="icO-BB-rhE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="825" y="-51"/>
+            <point key="canvasLocation" x="846" y="-412"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="5zR-Ao-v2V">
@@ -190,34 +189,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bZE-ZQ-s9f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1759" y="-81"/>
-        </scene>
-        <!--Activity Table View Controller-->
-        <scene sceneID="9aj-ds-Lyf">
-            <objects>
-                <tableViewController id="013-bf-DsZ" customClass="ActivityTableViewController" customModule="ActivityLabeling" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Kto-5Q-6ow">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="P8i-VA-kyF">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="P8i-VA-kyF" id="P6V-nT-RJZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="013-bf-DsZ" id="nTl-MW-fwn"/>
-                            <outlet property="delegate" destination="013-bf-DsZ" id="KQz-6Y-SHt"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="amn-LH-nxK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="825" y="-745"/>
         </scene>
         <!--Labeling-->
         <scene sceneID="sBT-pH-P9k">
