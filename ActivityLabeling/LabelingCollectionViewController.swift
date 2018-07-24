@@ -190,16 +190,17 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let alert = UIAlertController(title: "Start Activity", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Start", style: .default, handler: { action in
             self.sendLabel(activity: activity, status: status, handler: { response in
-                if response {
-                    
-                    self.selectedItems[indexPath.row] = true
-                    cell.iconView.backgroundColor = .flatSkyBlue
-                    
-                    self.changeStatus()
-                } else {
+                
+                guard response else {
                     // 通信失敗したら選択状態を元に戻す
                     collectionView.deselectItem(at: indexPath, animated: true)
+                    return
                 }
+                
+                self.selectedItems[indexPath.row] = true
+                cell.iconView.backgroundColor = .flatSkyBlue
+                
+                self.changeStatus()
             })
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
