@@ -17,6 +17,6 @@ struct Config {
     static let password = "password"
     static let database = "database"
     static let measurement = "measurement"
-    static let activityDict = "activityDict"
+    static let activities = "activities"
     
 }

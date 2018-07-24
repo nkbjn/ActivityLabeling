@@ -10,46 +10,27 @@
 	<string>app</string>
 	<key>measurement</key>
 	<string>label</string>
-	<key>activityDict</key>
-	<dict>
-		<key>cook</key>
+	<key>activities</key>
+	<array>
 		<string>Cooking</string>
-		<key>eat</key>
 		<string>Eating</string>
-		<key>clean_room</key>
 		<string>CleaningRoom</string>
-		<key>bath</key>
 		<string>Bathing</string>
-		<key>sleep</key>
 		<string>Sleeping</string>
-		<key>read_book</key>
 		<string>ReadingBook</string>
-		<key>wash_face</key>
 		<string>WashingFace</string>
-		<key>wash_dishes</key>
 		<string>WashingDishes</string>
-		<key>watch_tv</key>
 		<string>WatchingTelevision</string>
-		<key>clean_bath</key>
 		<string>CleaningBathroom</string>
-		<key>work_on_pc</key>
 		<string>WorkingOnPC</string>
-		<key>dress</key>
 		<string>Dressing</string>
-		<key>go_outside</key>
 		<string>GoingOut</string>
-		<key>laundry</key>
 		<string>Laundry</string>
-		<key>play_game</key>
 		<string>PlayingGame</string>
-		<key>use_phone</key>
-		<string>PlayingSmartphone</string>
-		<key>brush_teeth</key>
+		<string>UsingSmartphone</string>
 		<string>BrushingTeeth</string>
-		<key>makeup</key>
 		<string>MakingUp</string>
-		<key>other</key>
 		<string>Other</string>
-	</dict>
+	</array>
 </dict>
 </plist>
