@@ -12,63 +12,36 @@ import APIKit
 /// ラベリングの履歴を表示するTableViewController
 class HistoryTableViewController: UITableViewController {
     
-    var selectedID: String?             // 選択したラベリングID
     var labelList = [[String: Any]()]
 
+    let api = APIManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "History"
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
+    func reload() {
         self.labelList.removeAll()
         self.tableView.reloadData()
         
-        if let user = Keychain.user.value(),
-            let password = Keychain.password.value() {
+        self.api.select(handler: { list, error in
             
-            let database = UserDefaults.standard.string(forKey: Config.database)!
-            let ssl = UserDefaults.standard.bool(forKey: Config.ssl)
-            let host = UserDefaults.standard.string(forKey: Config.host)!
-            let port = UserDefaults.standard.integer(forKey: Config.port)
-            
-            let query = "SELECT * FROM label WHERE \"user\"='\(user)'"
-            let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
-            let request = QueryRequest(influxdb: influxdb, query: query, database: database)
-            
-            Session.send(request) { result in
-                switch result {
-                case let .success(.results(value)):
-                    if let results = value.results {
-                        for result in results {
-                            if let series = result.series {
-                                for s in series {
-                                    for v in s.values {
-                                        self.labelList.append(zip(s.columns, v).reduce(into: [String: Any]()) { $0[$1.0] = $1.1 })
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    self.tableView.reloadData()
-                    
-                case .success(.noContent):
-                    break
-                case .success(.unknown(_)):
-                    break
-                    
-                case .failure(let error):
-                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                    
-                }
+            guard (error == nil) else {
+                let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+                return
             }
             
-        }
+            self.labelList = list!
+            self.tableView.reloadData()
+        })
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        reload()
     }
 
     // MARK: - Table view data source

@@ -16,6 +16,8 @@ class SetupViewController: FormViewController {
 
     let defaults = UserDefaults.standard
     
+    let api = APIManager.shared
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,45 +109,20 @@ class SetupViewController: FormViewController {
     
     /// DBサーバへの接続テストを行う
     func connectionTest() {
-        
-        let host = defaults.string(forKey: Config.host)
-        guard (host != nil) else {
-            let alert = UIAlertController(title: "Error",
-                                          message: "Please input host.",
+        self.api.test(handler: {error in
+            guard (error == nil) else {
+                let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+                return
+            }
+            
+            let alert = UIAlertController(title: "Success",
+                                          message: "Connection successed.",
                                           preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true)
-            return
-        }
-        
-        let port = defaults.integer(forKey: Config.port)
-        let ssl = defaults.bool(forKey: Config.ssl)
-        
-        if let user = Keychain.user.value(),
-            let password = Keychain.password.value() {
-            
-            let influxdb = InfluxDBClient(host: host!, port: port, user: user, password: password, ssl: ssl)
-            let request = QueryRequest(influxdb: influxdb, query: "SHOW DATABASES")
-            
-            Session.send(request) { result in
-                switch result {
-                case .success:
-                    let alert = UIAlertController(title: "Success",
-                                                  message: "Connection successed.",
-                                                  preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                    
-                case .failure(let error):
-                    let alert = UIAlertController(title: "Error",
-                                                  message: error.localizedDescription,
-                                                  preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                    
-                }
-            }
-        }
+        })
     }
     
     
