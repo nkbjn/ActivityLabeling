@@ -34,7 +34,7 @@ class HistoryTableViewController: UITableViewController {
                 return
             }
             
-            self.labelList = list!
+            self.labelList = list!.reversed()
             self.tableView.reloadData()
         })
     }
