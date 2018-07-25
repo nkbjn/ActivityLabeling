@@ -79,7 +79,7 @@ class HistoryTableViewController: UITableViewController {
             let timeStr = convertString(arg: time)
             let f = DateFormatter()
             f.locale = Locale(identifier: "en_US_POSIX")
-            f.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZ'"
+            f.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZ'"
             if let date = f.date(from: timeStr) {
                 f.timeStyle = .medium
                 f.dateStyle = .medium
