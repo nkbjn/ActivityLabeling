@@ -68,13 +68,6 @@ class HistoryTableViewController: UITableViewController {
         
         let dict = self.labelList[indexPath.row]
         
-        if let activity = dict["activity"] as? StringOrIntType,
-            let status = dict["status"] as? StringOrIntType {
-            let activityStr = convertString(arg: activity)
-            let statusStr = convertString(arg: status) == "1" ? "Start": "Finish"
-            cell.textLabel?.text = "\(activityStr)：\(statusStr)"
-        }
-        
         if let time = dict["time"] as? StringOrIntType {
             let timeStr = convertString(arg: time)
             let f = DateFormatter()
@@ -84,8 +77,15 @@ class HistoryTableViewController: UITableViewController {
                 f.timeStyle = .medium
                 f.dateStyle = .medium
                 f.locale = Locale(identifier: "ja_JP")
-                cell.detailTextLabel?.text = f.string(from: date).description
+                cell.textLabel?.text = f.string(from: date).description
             }
+        }
+        
+        if let activity = dict["activity"] as? StringOrIntType,
+            let status = dict["status"] as? StringOrIntType {
+            let activityStr = convertString(arg: activity)
+            let statusStr = convertString(arg: status) == "1" ? "Start": "Finish"
+            cell.detailTextLabel?.text = "\(activityStr)：\(statusStr)"
         }
         
         return cell
