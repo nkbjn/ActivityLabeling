@@ -20,6 +20,8 @@ class APIManager: NSObject {
     var host = ""
     var port = 0
     
+    let unit = "s"
+    
     /// KeyChainとUserDefaultsに保存されているパラメータを読み込む
     func paramLoad() {
         user = Keychain.user.value()!
@@ -57,6 +59,7 @@ class APIManager: NSObject {
     /// DBにラベルデータを書き込む
     ///
     /// - Parameters:
+    ///   - time: 時間
     ///   - activity: 行動
     ///   - status: 行動の状態
     ///   - handler: 送信結果を返却する
@@ -69,10 +72,10 @@ class APIManager: NSObject {
         tags["activity"] = activity
         var fields: [String: Any] = [:]
         fields["status"] = status ? 1:0
-        let timeInterval = time.timeIntervalSince1970 * 1000000000 // ナノ秒に変更
+        let timeInterval = time.timeIntervalSince1970
         
         let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
-        let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: tags, fields: fields, time: timeInterval)
+        let request = WriteRequest(influxdb: influxdb, precision: unit, database: database, measurement: measurement, tags: tags, fields: fields, time: timeInterval)
         
         Session.send(request) { result in
             switch result {
@@ -94,7 +97,7 @@ class APIManager: NSObject {
         
         paramLoad()
         
-        let query = " DELETE FROM \(measurement) WHERE \"user\"='\(user)' and \"time\"='\(time)'"
+        let query = "DELETE FROM \(measurement) WHERE \"user\"='\(user)' and \"time\"=\(time)\(unit)"
         let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
         let request = QueryRequest(influxdb: influxdb, query: query, database: database)
         
@@ -120,7 +123,7 @@ class APIManager: NSObject {
         var list = [[String: Any]]()
         let query = "SELECT * FROM \(measurement) WHERE \"user\"='\(user)'"
         let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
-        let request = QueryRequest(influxdb: influxdb, query: query, database: database)
+        let request = QueryRequest(influxdb: influxdb, query: query, database: database, epoch: unit)
         
         Session.send(request) { result in
             switch result {

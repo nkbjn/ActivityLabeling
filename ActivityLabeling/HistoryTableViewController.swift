@@ -70,10 +70,10 @@ class HistoryTableViewController: UITableViewController {
         
         if let time = dict["time"] as? StringOrIntType {
             let timeStr = convertString(arg: time)
-            let f = DateFormatter()
-            f.locale = Locale(identifier: "en_US_POSIX")
-            f.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZ'"
-            if let date = f.date(from: timeStr) {
+            
+            if let timeInterval = TimeInterval(timeStr) {
+                let date = Date(timeIntervalSince1970: timeInterval)
+                let f = DateFormatter()
                 f.timeStyle = .medium
                 f.dateStyle = .medium
                 f.locale = Locale(identifier: "ja_JP")
