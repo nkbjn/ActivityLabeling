@@ -27,6 +27,8 @@
 		347EF6422034923200B20F09 /* LabelingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347EF6412034923200B20F09 /* LabelingCollectionViewCell.swift */; };
 		347EF6462034945B00B20F09 /* LabelingCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347EF6452034945B00B20F09 /* LabelingCollectionViewController.swift */; };
 		34D8035C2106E42E00C2C441 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D8035B2106E42E00C2C441 /* KeyChain.swift */; };
+		34D803602107607500C2C441 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D8035F2107607500C2C441 /* APIManager.swift */; };
+		34D803622107873E00C2C441 /* AddLabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D803612107873E00C2C441 /* AddLabelViewController.swift */; };
 		B112682AED6E18EBF924BD04 /* Pods_ActivityLabeling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB54DD79EC334BABFDD325C4 /* Pods_ActivityLabeling.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +56,8 @@
 		347EF6412034923200B20F09 /* LabelingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelingCollectionViewCell.swift; sourceTree = "<group>"; };
 		347EF6452034945B00B20F09 /* LabelingCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelingCollectionViewController.swift; sourceTree = "<group>"; };
 		34D8035B2106E42E00C2C441 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+		34D8035F2107607500C2C441 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		34D803612107873E00C2C441 /* AddLabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLabelViewController.swift; sourceTree = "<group>"; };
 		AB54DD79EC334BABFDD325C4 /* Pods_ActivityLabeling.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ActivityLabeling.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9410C94B9F09F5C3BFB9AD5 /* Pods-ActivityLabeling.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActivityLabeling.release.xcconfig"; path = "Pods/Target Support Files/Pods-ActivityLabeling/Pods-ActivityLabeling.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -105,11 +109,13 @@
 				347EF6412034923200B20F09 /* LabelingCollectionViewCell.swift */,
 				347EF63F20347ECB00B20F09 /* LabelingCollectionViewCell.xib */,
 				344544AC202F3B8E0038DCF5 /* HistoryTableViewController.swift */,
+				34D803612107873E00C2C441 /* AddLabelViewController.swift */,
+				34D8035F2107607500C2C441 /* APIManager.swift */,
+				344544BB2030148B0038DCF5 /* InfluxDB */,
 				34D8035B2106E42E00C2C441 /* KeyChain.swift */,
 				344544A6202EF5980038DCF5 /* Config.swift */,
 				344544AA202F1C6B0038DCF5 /* DefaultConfig.swift */,
 				344544A8202F1B3C0038DCF5 /* DefaultConfig.plist */,
-				344544BB2030148B0038DCF5 /* InfluxDB */,
 				34454493202E8D020038DCF5 /* Main.storyboard */,
 				34454496202E8D020038DCF5 /* Assets.xcassets */,
 				34454498202E8D020038DCF5 /* LaunchScreen.storyboard */,
@@ -292,6 +298,8 @@
 				344544AD202F3B8E0038DCF5 /* HistoryTableViewController.swift in Sources */,
 				344544B1202F55BC0038DCF5 /* SetupViewController.swift in Sources */,
 				347EF6422034923200B20F09 /* LabelingCollectionViewCell.swift in Sources */,
+				34D803602107607500C2C441 /* APIManager.swift in Sources */,
+				34D803622107873E00C2C441 /* AddLabelViewController.swift in Sources */,
 				3469EAAA2030B892004A9150 /* InfluxDBResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -434,13 +442,16 @@
 			baseConfigurationReference = 1550A7855010C088261DBF9C /* Pods-ActivityLabeling.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2CZDW9W9EK;
+				DEVELOPMENT_TEAM = ZY6FK4H66Q;
 				INFOPLIST_FILE = ActivityLabeling/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.naist.wataru-sa.ActivityLabeling";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.naist.ubi-lab.ActivityLabeling";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -451,13 +462,16 @@
 			baseConfigurationReference = B9410C94B9F09F5C3BFB9AD5 /* Pods-ActivityLabeling.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2CZDW9W9EK;
+				DEVELOPMENT_TEAM = ZY6FK4H66Q;
 				INFOPLIST_FILE = ActivityLabeling/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.naist.wataru-sa.ActivityLabeling";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.naist.ubi-lab.ActivityLabeling";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

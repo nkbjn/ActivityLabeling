@@ -48,6 +48,12 @@ extension InfluxDBRequest {
         return .unknown(object)
     }
     
+    func intercept(urlRequest: URLRequest) throws -> URLRequest {
+        var urlRequest = urlRequest
+        urlRequest.timeoutInterval = 5.0
+        return urlRequest
+    }
+    
     // 異常終了時はJSONが返ってくるので、InfluxDBErrorでパースさせる
     func intercept(object: Any, urlResponse: HTTPURLResponse) throws -> Any {
         guard (200..<300).contains(urlResponse.statusCode) else {

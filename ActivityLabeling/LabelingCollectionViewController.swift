@@ -14,17 +14,12 @@ private let reuseIdentifier = "Cell"
 class LabelingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let activities = UserDefaults.standard.array(forKey: Config.activities)!
-    let database = UserDefaults.standard.string(forKey: Config.database)!
-    let measurement = UserDefaults.standard.string(forKey: Config.measurement)!
-    let ssl = UserDefaults.standard.bool(forKey: Config.ssl)
-    let host = UserDefaults.standard.string(forKey: Config.host)!
-    let port = UserDefaults.standard.integer(forKey: Config.port)
     
     @IBOutlet var collectionView: UICollectionView!
     
-    var id: String? // ラベリングを保存するときのID
     var selectedItems = [Int: Bool]()
 
+    let api = APIManager.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,42 +58,6 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
             // 行動が選択されていなければステータスを未選択に変える
             navigationController?.navigationBar.barTintColor = .flatRed
             title = "Unselected"
-        }
-    }
-    
-    
-    /// DBサーバにラベルデータを送信する
-    ///
-    /// - Parameters:
-    ///   - activity: 行動
-    ///   - status: 行動の状態
-    ///   - handler: 送信結果を返却する
-    func sendLabel(activity: String, status: Bool, handler: @escaping (Bool) -> ()) {
-        
-        if let user = Keychain.user.value(),
-            let password = Keychain.password.value() {
-        
-            var tags: [String: String] = [:]
-            tags["user"] = user
-            tags["activity"] = activity
-            var fields: [String: Any] = [:]
-            fields["status"] = status ? 1:0
-            
-            let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
-            let request = WriteRequest(influxdb: influxdb, database: database, measurement: measurement, tags: tags, fields: fields)
-            
-            Session.send(request) { result in
-                switch result {
-                case .success:
-                    handler(true)
-                    
-                case .failure(let error):
-                    handler(false)
-                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                }
-            }
         }
     }
     
@@ -183,22 +142,27 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
         let activity = activities[indexPath.row] as! String
         let status = cell.isSelected
+        let time = Date()
         
         let massage = "Would you like to start \(activity)?"
         let alert = UIAlertController(title: "Start Activity", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Start", style: .default, handler: { action in
-            self.sendLabel(activity: activity, status: status, handler: { response in
+            self.api.write(time: time, activity: activity, status: status, handler: { error in
                 
-                guard response else {
+                guard (error == nil) else {
                     // 通信失敗したら選択状態を元に戻す
                     collectionView.deselectItem(at: indexPath, animated: true)
+                    let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
                     return
                 }
-                
                 self.selectedItems[indexPath.row] = true
                 cell.iconView.backgroundColor = .flatSkyBlue
                 
                 self.changeStatus()
+                
+                
             })
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
@@ -212,15 +176,19 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
         let activity = activities[indexPath.row] as! String
         let status = cell.isSelected
+        let time = Date()
         
         let massage = "Would you like to finish \(activity)?"
         let alert = UIAlertController(title: "Finish Activity", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Finish", style: .default, handler: { action in
-            self.sendLabel(activity: activity, status: status, handler: { response in
+            self.api.write(time: time, activity: activity, status: status, handler: { error in
                 
-                guard response else {
+                guard (error == nil) else {
                     // 通信失敗したら選択状態を元に戻す
                     collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+                    let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
                     return
                 }
                 
