@@ -110,7 +110,7 @@ class HistoryTableViewController: UITableViewController {
         let alert = UIAlertController(title: "Delete Label", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { action in
             
-            self.api.drop(time: timeStr, handler: { error in
+            self.api.delete(time: timeStr, handler: { error in
                 
                 guard (error == nil) else {
                     let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)

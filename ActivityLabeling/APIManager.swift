@@ -90,7 +90,7 @@ class APIManager: NSObject {
     /// - Parameters:
     ///   - time: 時間
     ///   - handler: 送信結果を返却する
-    func drop(time: String, handler: @escaping (Error?) -> ()) {
+    func delete(time: String, handler: @escaping (Error?) -> ()) {
         
         paramLoad()
         
