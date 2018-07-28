@@ -114,7 +114,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         cell.imageView.image = UIImage(named: activity)?.withRenderingMode(.alwaysTemplate)
         cell.textLabel.text = activity
         
-        if let _ = selectedItems[indexPath.row] {
+        if selectedItems[indexPath.row] != nil {
             collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
             cell.isSelected = true
             cell.iconView.backgroundColor = .flatSkyBlue
