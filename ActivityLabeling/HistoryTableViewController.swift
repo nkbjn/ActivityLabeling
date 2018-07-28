@@ -12,14 +12,9 @@ import APIKit
 /// ラベリングの履歴を表示するTableViewController
 class HistoryTableViewController: UITableViewController {
     
-    var labelList = [[String: Any]()]
-
     let api = APIManager.shared
+    var labelList = [[String: Any]()]
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = "History"
-    }
     
     func reload() {
         self.labelList.removeAll()
@@ -39,6 +34,9 @@ class HistoryTableViewController: UITableViewController {
         })
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.reload()

@@ -20,6 +20,32 @@ class AddLabelViewController: FormViewController {
     var components = DateComponents()
     var activity = ""
     var status = true
+    
+    @IBAction func exit(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func add(_ sender: Any) {
+        guard let time = Calendar.current.date(from: self.components) else {
+            let alert = UIAlertController(title: "Error", message: "Value error.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            return
+        }
+        
+        self.api.write(time: time, activity: activity, status: status, handler: { error in
+            
+            guard (error == nil) else {
+                let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+                return
+            }
+            
+            self.dismiss(animated: true, completion: nil)
+        })
+        
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,25 +128,5 @@ class AddLabelViewController: FormViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    @IBAction func exit(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    @IBAction func add(_ sender: Any) {
-        let time = self.calendar.date(from: self.components)
-        self.api.write(time: time!, activity: activity, status: status, handler: { error in
-
-            guard (error == nil) else {
-                let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true)
-                return
-            }
-
-            self.dismiss(animated: true, completion: nil)
-        })
-        
-    }
-    
 
 }

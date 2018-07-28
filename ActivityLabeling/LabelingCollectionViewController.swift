@@ -13,29 +13,11 @@ private let reuseIdentifier = "Cell"
 
 class LabelingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    let api = APIManager.shared
     let activities = UserDefaults.standard.array(forKey: Config.activities)!
+    var selectedItems = [Int: Bool]()
     
     @IBOutlet var collectionView: UICollectionView!
-    
-    var selectedItems = [Int: Bool]()
-
-    let api = APIManager.shared
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        collectionView!.register(UINib(nibName: "LabelingCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
-        collectionView?.allowsMultipleSelection = true
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        changeStatus()
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        // 画面の向きが変わったらアイコンの大きさを更新する
-        collectionView.reloadData()
-    }
     
     /// 行動が選択されているかどうかを判定する
     ///
@@ -46,7 +28,6 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
         return true
     }
-    
     
     /// 行動が選択されているかどうかを確認して、ステータスを変更する
     func changeStatus() {
@@ -87,6 +68,19 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         self.present(alert, animated: true)
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.collectionView!.register(UINib(nibName: "LabelingCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView?.allowsMultipleSelection = true
+        
+        self.changeStatus()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        // 画面の向きが変わったらアイコンの大きさを更新する
+        self.collectionView.reloadData()
+    }
     
     // MARK: UICollectionViewDelegateFlowLayout
     
@@ -101,7 +95,6 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
         return CGSize(width: cellSize, height: cellSize)
     }
-    
 
     // MARK: UICollectionViewDataSource
 
