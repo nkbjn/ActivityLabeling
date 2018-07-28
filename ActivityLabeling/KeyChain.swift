@@ -14,6 +14,7 @@ public enum Keychain: String {
     case user = "user"
     case password = "password"
     
+    
     // データの保存
     public func set(_ value: String) {
         let query: [String: AnyObject] = [
@@ -24,6 +25,7 @@ public enum Keychain: String {
         SecItemDelete(query as CFDictionary)
         SecItemAdd(query as CFDictionary, nil)
     }
+    
     // データの取り出し
     public func value() -> String? {
         let query: [String: AnyObject] = [

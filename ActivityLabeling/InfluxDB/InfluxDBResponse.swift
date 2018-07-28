@@ -60,4 +60,17 @@ enum StringOrIntType: Codable {
             try container.encode(string)
         }
     }
+    
+    /// InfluxDBから取得したデータを文字列に変換
+    ///
+    /// - Parameter arg: Field値
+    /// - Returns: Field値の文字列
+    func string() -> String {
+        switch self {
+        case let .string(str):
+            return str
+        case let .int(int):
+            return String(int)
+        }
+    }
 }

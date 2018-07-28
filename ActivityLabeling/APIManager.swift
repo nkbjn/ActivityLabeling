@@ -10,6 +10,7 @@ import Foundation
 import APIKit
 
 class APIManager: NSObject {
+    
     static let shared = APIManager()
     
     var user = ""
@@ -19,8 +20,8 @@ class APIManager: NSObject {
     var ssl = false
     var host = ""
     var port = 0
-    
     let unit = "s"
+    
     
     /// KeyChainとUserDefaultsに保存されているパラメータを読み込む
     func paramLoad() {
