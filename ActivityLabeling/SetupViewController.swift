@@ -147,6 +147,10 @@ class SetupViewController: FormViewController {
             DefaultConfig().reset()
             
             // 入力エリアの表示も更新する
+            let ssl = self.form.rowBy(tag: Config.ssl) as! SwitchRow
+            ssl.value = self.defaults.bool(forKey: Config.ssl)
+            ssl.reload()
+            
             let host = self.form.rowBy(tag: Config.host) as! AccountRow
             host.value = self.defaults.string(forKey: Config.host)
             host.reload()
