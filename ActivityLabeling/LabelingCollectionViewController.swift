@@ -161,12 +161,12 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
             // キャンセル時には選択状態を元に戻す
             collectionView.deselectItem(at: indexPath, animated: true)
         }))
-        present(alert, animated: true)
+        self.present(alert, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! LabelingCollectionViewCell
-        let activity = activities[indexPath.row] as! String
+        let activity = self.activities[indexPath.row] as! String
         let status = cell.isSelected
         let time = Date()
         
