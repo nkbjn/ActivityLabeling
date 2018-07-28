@@ -144,17 +144,17 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
                 guard (error == nil) else {
                     // 通信失敗したら選択状態を元に戻す
                     collectionView.deselectItem(at: indexPath, animated: true)
+                    
                     let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true)
                     return
                 }
+                
                 self.selectedItems[indexPath.row] = true
                 cell.iconView.backgroundColor = .flatSkyBlue
                 
                 self.changeStatus()
-                
-                
             })
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
@@ -178,6 +178,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
                 guard (error == nil) else {
                     // 通信失敗したら選択状態を元に戻す
                     collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+                    
                     let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true)
