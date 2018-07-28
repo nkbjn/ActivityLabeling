@@ -21,7 +21,7 @@ class SetupViewController: FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Labeling"
+        self.title = "Labeling"
         
         form
             +++ Section("Datababe Config")
@@ -29,7 +29,7 @@ class SetupViewController: FormViewController {
             <<< SwitchRow() {
                 $0.tag = Config.ssl
                 $0.title = "SSL"
-                $0.value = defaults.bool(forKey: Config.ssl)
+                $0.value = self.defaults.bool(forKey: Config.ssl)
                 
             }.onChange {row in
                 // 内容が変更されたらUserdefaultsに書き込む
@@ -40,7 +40,7 @@ class SetupViewController: FormViewController {
                 $0.tag = Config.host
                 $0.title = "Host"
                 $0.placeholder = "Host"
-                $0.value = defaults.string(forKey: Config.host)
+                $0.value = self.defaults.string(forKey: Config.host)
                 
             }.onChange {row in
                 // 内容が変更されたらUserdefaultsに書き込む
@@ -51,7 +51,7 @@ class SetupViewController: FormViewController {
                 $0.tag = Config.port
                 $0.title = "Port"
                 $0.placeholder = "Port"
-                $0.value = defaults.integer(forKey: Config.port)
+                $0.value = self.defaults.integer(forKey: Config.port)
                 let formatter = NumberFormatter()
                 formatter.numberStyle = .none
                 $0.formatter = formatter
@@ -134,7 +134,7 @@ class SetupViewController: FormViewController {
             self.performSegue(withIdentifier: "LabelingViewControllerSegue", sender: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true)
+        self.present(alert, animated: true)
     }
     
     
@@ -169,7 +169,7 @@ class SetupViewController: FormViewController {
             
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true)
+        self.present(alert, animated: true)
     }
     
 }

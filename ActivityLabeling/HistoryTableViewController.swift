@@ -41,7 +41,7 @@ class HistoryTableViewController: UITableViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
-        reload()
+        self.reload()
     }
 
     // MARK: - Table view data source
@@ -122,7 +122,7 @@ class HistoryTableViewController: UITableViewController {
             })
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true)
+        self.present(alert, animated: true)
     }
 
 }

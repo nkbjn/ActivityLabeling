@@ -41,7 +41,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     ///
     /// - Returns: 行動が一つでも選択されているかどうか
     func selected() -> Bool {
-        if selectedItems.isEmpty {
+        if self.selectedItems.isEmpty {
             return false
         }
         return true
@@ -50,28 +50,27 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     /// 行動が選択されているかどうかを確認して、ステータスを変更する
     func changeStatus() {
-        if selected() {
+        if self.selected() {
             // 行動が選択されていればステータスをノーマルに変える
-            navigationController?.navigationBar.barTintColor = .flatBlack
-            title = ""
+            self.navigationController?.navigationBar.barTintColor = .flatBlack
+            self.title = ""
         } else {
             // 行動が選択されていなければステータスを未選択に変える
-            navigationController?.navigationBar.barTintColor = .flatRed
-            title = "Unselected"
+            self.navigationController?.navigationBar.barTintColor = .flatRed
+            self.title = "Unselected"
         }
     }
-    
     
     /// 終了ボタンを押した時の処理
     @IBAction func exit(_ sender: Any) {
         
-        guard !selected() else {
+        guard !self.selected() else {
             // 行動を選択している状態で終了しようとした場合
             let alert = UIAlertController(title: "Error",
                                           message: "Please finish all activities.",
                                           preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alert, animated: true)
+            self.present(alert, animated: true)
             return
         }
         
@@ -85,15 +84,15 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
                                         self.dismiss(animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true)
+        self.present(alert, animated: true)
     }
     
     
     // MARK: UICollectionViewDelegateFlowLayout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat = view.frame.width
-        let height: CGFloat = view.frame.height
+        let width: CGFloat = self.view.frame.width
+        let height: CGFloat = self.view.frame.height
         var cellSize: CGFloat = 0
         if width < height {
             cellSize = width / 5
@@ -111,14 +110,14 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return activities.count
+        return self.activities.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! LabelingCollectionViewCell
     
         // Configure the cell
-        let activity = activities[indexPath.row] as! String
+        let activity = self.activities[indexPath.row] as! String
         cell.imageView.image = UIImage(named: activity)?.withRenderingMode(.alwaysTemplate)
         cell.textLabel.text = activity
         
@@ -202,7 +201,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
             // キャンセル時には選択状態を元に戻す
             collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
         }))
-        present(alert, animated: true)
+        self.present(alert, animated: true)
     }
 
 }
