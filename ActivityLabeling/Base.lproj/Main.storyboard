@@ -27,7 +27,7 @@
             </objects>
             <point key="canvasLocation" x="-850" y="301"/>
         </scene>
-        <!--History Table View Controller-->
+        <!--History-->
         <scene sceneID="0xe-gd-ETN">
             <objects>
                 <tableViewController id="ctr-qk-Cjj" customClass="HistoryTableViewController" customModule="ActivityLabeling" customModuleProvider="target" sceneMemberID="viewController">
@@ -66,7 +66,7 @@
                             <outlet property="delegate" destination="ctr-qk-Cjj" id="5vy-un-Ecq"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="8eO-cG-cRh">
+                    <navigationItem key="navigationItem" title="History" id="8eO-cG-cRh">
                         <barButtonItem key="rightBarButtonItem" title="Add" id="C4N-tJ-oSh">
                             <connections>
                                 <segue destination="CaS-hM-RGk" kind="presentation" modalTransitionStyle="crossDissolve" id="kIf-0j-cNF"/>
@@ -78,7 +78,7 @@
             </objects>
             <point key="canvasLocation" x="-26" y="301"/>
         </scene>
-        <!--Setup View Controller-->
+        <!--Labeling-->
         <scene sceneID="ACY-2E-aLo">
             <objects>
                 <viewController id="L1o-Te-wEB" customClass="SetupViewController" customModule="ActivityLabeling" customModuleProvider="target" sceneMemberID="viewController">
@@ -89,7 +89,7 @@
                         <viewLayoutGuide key="safeArea" id="KlL-pt-unq"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="" id="toK-d5-Fio"/>
-                    <navigationItem key="navigationItem" id="RqK-2b-qUQ">
+                    <navigationItem key="navigationItem" title="Labeling" id="RqK-2b-qUQ">
                         <barButtonItem key="rightBarButtonItem" title="Initialize" id="eec-LO-v1w">
                             <connections>
                                 <action selector="resetConfig:" destination="L1o-Te-wEB" id="zhd-gF-jYq"/>
@@ -229,7 +229,7 @@
             </objects>
             <point key="canvasLocation" x="846" y="301"/>
         </scene>
-        <!--Add Label View Controller-->
+        <!--Add Label-->
         <scene sceneID="g52-Ik-0Q0">
             <objects>
                 <viewController id="KSv-I2-gUr" customClass="AddLabelViewController" customModule="ActivityLabeling" customModuleProvider="target" sceneMemberID="viewController">
@@ -239,7 +239,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="nxJ-2S-EY7"/>
                     </view>
-                    <navigationItem key="navigationItem" id="0Fj-P6-QHI">
+                    <navigationItem key="navigationItem" title="Add Label" id="0Fj-P6-QHI">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="rOB-l8-zBm">
                             <connections>
                                 <action selector="exit:" destination="KSv-I2-gUr" id="Gd2-Aj-dvs"/>
