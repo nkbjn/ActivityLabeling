@@ -16,6 +16,7 @@ class HistoryTableViewController: UITableViewController {
     var labelList = [[String: Any]()]
     
     
+    /// テーブルビューに表示されている内容を再読み込みする
     func reload() {
         self.labelList.removeAll()
         self.tableView.reloadData()
@@ -52,39 +53,30 @@ class HistoryTableViewController: UITableViewController {
         return self.labelList.count
     }
     
-    func convertString(arg: StringOrIntType) -> String {
-        switch arg {
-        case let .string(str):
-            return str
-        case let .int(int):
-            return String(int)
-        }
-    }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         let dict = self.labelList[indexPath.row]
         
-        if let time = dict["time"] as? StringOrIntType {
-            let timeStr = convertString(arg: time)
-            
-            if let timeInterval = TimeInterval(timeStr) {
-                let date = Date(timeIntervalSince1970: timeInterval)
-                let f = DateFormatter()
-                f.timeStyle = .medium
-                f.dateStyle = .medium
-                f.locale = Locale(identifier: "ja_JP")
-                cell.textLabel?.text = f.string(from: date).description
-            }
+        guard let time = dict["time"] as? StringOrIntType,
+            let activity = dict["activity"] as? StringOrIntType,
+            let status = dict["status"] as? StringOrIntType else {
+            return cell
         }
         
-        if let activity = dict["activity"] as? StringOrIntType,
-            let status = dict["status"] as? StringOrIntType {
-            let activityStr = convertString(arg: activity)
-            let statusStr = convertString(arg: status) == "1" ? "Start": "Finish"
-            cell.detailTextLabel?.text = "\(activityStr)：\(statusStr)"
+        let timeStr = time.string()
+        if let timeInterval = TimeInterval(timeStr) {
+            let date = Date(timeIntervalSince1970: timeInterval)
+            let f = DateFormatter()
+            f.timeStyle = .medium
+            f.dateStyle = .medium
+            f.locale = Locale(identifier: "ja_JP")
+            cell.textLabel?.text = f.string(from: date).description
         }
+        
+        let activityStr = activity.string()
+        let statusStr = status.string()
+        cell.detailTextLabel?.text = "\(activityStr)：\(statusStr == "1" ? "Start": "Finish")"
         
         return cell
     }
@@ -92,18 +84,18 @@ class HistoryTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dict = self.labelList[indexPath.row]
         
-        guard let time = dict["time"] as? StringOrIntType else {
+        guard let time = dict["time"] as? StringOrIntType,
+            let activity = dict["activity"] as? StringOrIntType,
+            let status = dict["status"] as? StringOrIntType else {
+                let alert = UIAlertController(title: "Error", message: "Value error.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
             return
         }
-        guard let activity = dict["activity"] as? StringOrIntType else {
-            return
-        }
-        guard let status = dict["status"] as? StringOrIntType else {
-            return
-        }
-        let timeStr = convertString(arg: time)
-        let activityStr = convertString(arg: activity)
-        let statusStr = convertString(arg: status)
+        
+        let timeStr = time.string()
+        let activityStr = activity.string()
+        let statusStr = status.string()
         let massage = "Would you like to delete \(activityStr):\(statusStr == "1" ? "Start": "Finish")?"
         let alert = UIAlertController(title: "Delete Label", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { action in
@@ -116,6 +108,7 @@ class HistoryTableViewController: UITableViewController {
                     self.present(alert, animated: true)
                     return
                 }
+                
                 self.reload()
             })
         }))
