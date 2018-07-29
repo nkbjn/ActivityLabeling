@@ -7,7 +7,6 @@ target 'ActivityLabeling' do
 
   # Pods for ActivityLabeling
   pod 'Eureka'
-  pod 'RealmSwift'
   pod 'APIKit', 	'~> 3.1'
   pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
 

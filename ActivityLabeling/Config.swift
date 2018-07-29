@@ -10,9 +10,13 @@
 /// 設定をUserDefaultに保存するときのKey
 struct Config {
     
+    static let ssl = "ssl"
+    static let host = "host"
+    static let port = "port"
+    static let user = "user"
+    static let password = "password"
     static let database = "database"
     static let measurement = "measurement"
-    static let host = "host"
-    static let activityDict = "activityDict"
+    static let activities = "activities"
     
 }

@@ -24,6 +24,7 @@ class LabelingCollectionViewCell: UICollectionViewCell {
         self.iconView.layer.masksToBounds = true
         self.iconView.backgroundColor = UIColor.flatBlack
         
+        self.textLabel.adjustsFontSizeToFitWidth = true
     }
     
 }

@@ -7,28 +7,40 @@
 //
 
 import UIKit
-import RealmSwift
-
+import APIKit
 
 /// ラベリングの履歴を表示するTableViewController
 class HistoryTableViewController: UITableViewController {
     
-    let realm = try! Realm()
-    var labelings: Results<Labeling>!   // ラベリング履歴
-    var selectedID: String?             // 選択したラベリングID
-
+    let api = APIManager.shared
+    var labelList = [[String: Any]()]
+    
+    
+    /// テーブルビューに表示されている内容を再読み込みする
+    func reload() {
+        self.labelList.removeAll()
+        self.tableView.reloadData()
+        
+        self.api.select(handler: { list, error in
+            
+            guard (error == nil) else {
+                let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+                return
+            }
+            
+            self.labelList = list!.reversed()
+            self.tableView.reloadData()
+        })
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "履歴"
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // ラベリング時間で降順にソートする
-        labelings = realm.objects(Labeling.self).sorted(byKeyPath: "startTime", ascending: false)
-        
-        // タブ切り替え時に再読み込みされるようにする
-        tableView.reloadData()
+        self.reload()
     }
 
     // MARK: - Table view data source
@@ -38,45 +50,70 @@ class HistoryTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return labelings.count
+        return self.labelList.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        let labeling = labelings[indexPath.row]
+        let dict = self.labelList[indexPath.row]
         
-        // メインはラベリング開始時間
-        let f = DateFormatter()
-        f.dateStyle = .medium
-        f.timeStyle = .medium
-        f.locale = Locale(identifier: "ja_JP")
-        cell.textLabel?.text = "\(f.string(from: labeling.startTime)) 〜"
+        guard let time = dict["time"] as? StringOrIntType,
+            let activity = dict["activity"] as? StringOrIntType,
+            let status = dict["status"] as? StringOrIntType else {
+            return cell
+        }
         
-        // 詳細は接続ホスト
-        cell.detailTextLabel?.text = "\(labeling.host)"
+        let timeStr = time.string()
+        if let timeInterval = TimeInterval(timeStr) {
+            let date = Date(timeIntervalSince1970: timeInterval)
+            let f = DateFormatter()
+            f.timeStyle = .medium
+            f.dateStyle = .medium
+            f.locale = Locale(identifier: "ja_JP")
+            cell.textLabel?.text = f.string(from: date).description
+        }
         
-        // タッチできることをわかりやすくする
-        cell.accessoryType = .disclosureIndicator
+        let activityStr = activity.string()
+        let statusStr = status.string()
+        cell.detailTextLabel?.text = "\(activityStr)：\(statusStr == "1" ? "Start": "Finish")"
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 選択したラベリングのIDを取得する
-        let labeling = labelings[indexPath.row]
-        selectedID = labeling.id
+        let dict = self.labelList[indexPath.row]
         
-        // LabelTableViewControllerに遷移
-        performSegue(withIdentifier: "LabelTableViewControllerSegue", sender: nil)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "LabelTableViewControllerSegue" {
-            // どの履歴をタップしたのかを保存する
-            let vc = segue.destination as! LabelTableViewController
-            vc.labelingID = selectedID
+        guard let time = dict["time"] as? StringOrIntType,
+            let activity = dict["activity"] as? StringOrIntType,
+            let status = dict["status"] as? StringOrIntType else {
+                let alert = UIAlertController(title: "Error", message: "Value error.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            return
         }
+        
+        let timeStr = time.string()
+        let activityStr = activity.string()
+        let statusStr = status.string()
+        let massage = "Would you like to delete \(activityStr):\(statusStr == "1" ? "Start": "Finish")?"
+        let alert = UIAlertController(title: "Delete Label", message: massage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { action in
+            
+            self.api.delete(time: timeStr, handler: { error in
+                
+                guard (error == nil) else {
+                    let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                    return
+                }
+                
+                self.reload()
+            })
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
     }
 
 }

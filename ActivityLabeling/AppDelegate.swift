@@ -21,8 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 初期設定を読み込む
         DefaultConfig().setup()
         
-        // テーマカラーを設定する
-        Chameleon.setGlobalThemeUsingPrimaryColor(UIColor.flatBlack, withSecondaryColor: UIColor.white, andContentStyle: .light)
+        // NavigationBarの色を統一する
+        UINavigationBar.appearance().barTintColor = .flatBlack
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         
         return true
     }

@@ -30,10 +30,10 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Gz-AA-8ma">
-                        <rect key="frame" x="10.5" y="0.0" width="80" height="80"/>
+                        <rect key="frame" x="12.5" y="0.0" width="76" height="76"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CoY-fk-zaH">
-                                <rect key="frame" x="8" y="8" width="64" height="64"/>
+                                <rect key="frame" x="8" y="8" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="CoY-fk-zaH" secondAttribute="height" multiplier="1:1" id="Rxg-rw-zCI"/>
                                 </constraints>
@@ -55,7 +55,7 @@
                 <constraint firstItem="3Gz-AA-8ma" firstAttribute="top" secondItem="t4T-Vg-QsV" secondAttribute="top" id="NyJ-ra-wr4"/>
                 <constraint firstItem="3Gz-AA-8ma" firstAttribute="centerX" secondItem="t4T-Vg-QsV" secondAttribute="centerX" id="YIR-Vz-U61"/>
                 <constraint firstAttribute="trailing" secondItem="dCU-YO-aX4" secondAttribute="trailing" id="aTX-p9-JBY"/>
-                <constraint firstItem="dCU-YO-aX4" firstAttribute="top" secondItem="3Gz-AA-8ma" secondAttribute="bottom" id="u8h-KE-tZz"/>
+                <constraint firstItem="dCU-YO-aX4" firstAttribute="top" secondItem="3Gz-AA-8ma" secondAttribute="bottom" constant="4" id="u8h-KE-tZz"/>
                 <constraint firstItem="dCU-YO-aX4" firstAttribute="leading" secondItem="t4T-Vg-QsV" secondAttribute="leading" id="xcQ-UC-4MF"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="n5B-tF-F7h"/>

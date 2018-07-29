@@ -10,6 +10,7 @@ import APIKit
 
 class WriteRequest: InfluxDBRequest {
     let influxdb: InfluxDBClient
+    let precision: String?
     
     let measurement: String
     let database: String
@@ -19,12 +20,14 @@ class WriteRequest: InfluxDBRequest {
     
     
     init(influxdb: InfluxDBClient,
+         precision: String? = nil,
          database: String,
          measurement: String,
          tags: InfluxDBClient.Tags,
          fields: InfluxDBClient.Fields,
          time: TimeInterval? = nil) {
         self.influxdb = influxdb
+        self.precision = precision
         self.database = database
         self.measurement = measurement
         self.tags = tags
@@ -36,7 +39,18 @@ class WriteRequest: InfluxDBRequest {
     var path = "/write"
     
     var queryParameters: [String: Any]? {
-        return ["db": self.database]
+        var params: [String: Any] = [:]
+        params["db"] = database
+        if let user = self.influxdb.user {
+            params["u"] = user
+        }
+        if let password = self.influxdb.password {
+            params["p"] = password
+        }
+        if let precision = self.precision {
+            params["precision"] = precision
+        }
+        return params
     }
     
     var bodyParameters: BodyParameters? {
@@ -65,7 +79,7 @@ class WriteRequest: InfluxDBRequest {
         
         func buildEntity() throws -> RequestBodyEntity {
             let t_param = request.tags.map { "\($0)=\($1)" }
-            let tim = (request.time != nil) ? " \(request.time!)" : ""
+            let tim = (request.time != nil) ? " \(UInt64(request.time!))" : ""
             
             let params = "\(([request.measurement] + t_param).joined(separator: ",")) \(fieldsStr)\(tim)"
             
