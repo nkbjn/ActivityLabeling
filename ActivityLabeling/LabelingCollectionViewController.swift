@@ -17,6 +17,10 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     let activities = UserDefaults.standard.array(forKey: Config.activities)!
     var selectedItems = [Int: Bool]()
     
+//    @IBAction func stressLevel1ButtonTapped(_ sender: Any) {
+//        print("hoge")
+//    }
+    
     @IBOutlet var collectionView: UICollectionView!
     
     /// 行動が選択されているかどうかを判定する
@@ -33,11 +37,11 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
     func changeStatus() {
         if self.selected() {
             // 行動が選択されていればステータスをノーマルに変える
-            self.navigationController?.navigationBar.barTintColor = .flatBlack
-            self.title = ""
+            self.navigationController?.navigationBar.barTintColor = .flatBlack()
+            self.title = "Selected"
         } else {
             // 行動が選択されていなければステータスを未選択に変える
-            self.navigationController?.navigationBar.barTintColor = .flatRed
+            self.navigationController?.navigationBar.barTintColor = .flatRed()
             self.title = "Unselected"
         }
     }
@@ -117,11 +121,11 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         if selectedItems[indexPath.row] != nil {
             collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
             cell.isSelected = true
-            cell.iconView.backgroundColor = .flatSkyBlue
+            cell.iconView.backgroundColor = .flatSkyBlue()
         } else {
             collectionView.deselectItem(at: indexPath, animated: false)
             cell.isSelected = false
-            cell.iconView.backgroundColor = .flatBlack
+            cell.iconView.backgroundColor = .flatBlack()
         }
     
         return cell
@@ -135,10 +139,11 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let activity = activities[indexPath.row] as! String
         let status = cell.isSelected
         let time = Date()
-        
-        let massage = "Would you like to start \(activity)?"
-        let alert = UIAlertController(title: "Start Activity", message: massage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Start", style: .default, handler: { action in
+        let isStress = self.isStress(activity: activity)
+        let massage = self.selectStartMessage(activity: activity, isStress: isStress)
+        let alert = isStress ? UIAlertController(title: "Select Stress Level", message: massage, preferredStyle: .alert) : UIAlertController(title: "Start Activity", message: massage, preferredStyle: .alert)
+        let title = isStress ? "Select" : "Start"
+        alert.addAction(UIAlertAction(title: title, style: .default, handler: { action in
             self.api.write(time: time, activity: activity, status: status, handler: { error in
                 
                 guard (error == nil) else {
@@ -150,11 +155,14 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
                     self.present(alert, animated: true)
                     return
                 }
+                if(!isStress){
+                    self.selectedItems[indexPath.row] = true
+                    cell.iconView.backgroundColor = .flatSkyBlue()
                 
-                self.selectedItems[indexPath.row] = true
-                cell.iconView.backgroundColor = .flatSkyBlue
-                
-                self.changeStatus()
+                    self.changeStatus()
+                }else{
+                    collectionView.deselectItem(at: indexPath, animated: true)
+                }
             })
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
@@ -171,6 +179,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let time = Date()
         
         let massage = "Would you like to finish \(activity)?"
+        
         let alert = UIAlertController(title: "Finish Activity", message: massage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Finish", style: .default, handler: { action in
             self.api.write(time: time, activity: activity, status: status, handler: { error in
@@ -186,7 +195,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
                 }
                 
                 self.selectedItems.removeValue(forKey: indexPath.row)
-                cell.iconView.backgroundColor = .flatBlack
+                cell.iconView.backgroundColor = .flatBlack()
                 
                 self.changeStatus()
             })
@@ -198,4 +207,12 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         self.present(alert, animated: true)
     }
 
+    func isStress( activity: String) -> Bool {
+        return (activity == "StressLevel1" || activity == "StressLevel2" || activity == "StressLevel3" || activity == "StressLevel4" || activity == "StressLevel5")
+    }
+
+    
+    func selectStartMessage( activity: String, isStress: Bool) -> String {
+        return isStress ? "Would you like to select \(activity)?" : "Would you like to start \(activity)?"
+    }
 }
