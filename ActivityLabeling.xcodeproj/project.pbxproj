@@ -159,7 +159,6 @@
 				34454489202E8D020038DCF5 /* Frameworks */,
 				3445448A202E8D020038DCF5 /* Resources */,
 				EBC03FC055B8BCA4FA063ED7 /* [CP] Embed Pods Frameworks */,
-				A0A4D450174B4B861A6D6F47 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -220,21 +219,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A0A4D450174B4B861A6D6F47 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ActivityLabeling/Pods-ActivityLabeling-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B932D6AF5D646EA5FEE3FB50 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -259,7 +243,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ActivityLabeling/Pods-ActivityLabeling-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ActivityLabeling/Pods-ActivityLabeling-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/APIKit/APIKit.framework",
 				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/Eureka/Eureka.framework",
@@ -274,7 +258,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ActivityLabeling/Pods-ActivityLabeling-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ActivityLabeling/Pods-ActivityLabeling-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -444,11 +428,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZY6FK4H66Q;
+				DEVELOPMENT_TEAM = 8RHHFU87CQ;
 				INFOPLIST_FILE = ActivityLabeling/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.naist.ubi-lab.ActivityLabeling";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.naist.ubi-lab.ActivityLabeling20191225";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -464,11 +448,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZY6FK4H66Q;
+				DEVELOPMENT_TEAM = 8RHHFU87CQ;
 				INFOPLIST_FILE = ActivityLabeling/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.naist.ubi-lab.ActivityLabeling";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.naist.ubi-lab.ActivityLabeling20191225";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

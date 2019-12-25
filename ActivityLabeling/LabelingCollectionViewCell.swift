@@ -22,7 +22,7 @@ class LabelingCollectionViewCell: UICollectionViewCell {
         
         self.iconView.layer.cornerRadius = 5
         self.iconView.layer.masksToBounds = true
-        self.iconView.backgroundColor = UIColor.flatBlack
+        self.iconView.backgroundColor = UIColor.flatBlack()
         
         self.textLabel.adjustsFontSizeToFitWidth = true
     }

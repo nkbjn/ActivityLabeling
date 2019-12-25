@@ -67,10 +67,16 @@ class APIManager: NSObject {
     func write(time: Date, activity: String, status: Bool, handler: @escaping (Error?) -> ()) {
         
         paramLoad()
-        
+        let stresses: [String] = ["StressLevel1", "StressLevel2", "StressLevel3", "StressLevel4", "StressLevel5"]
+        let isStress = self.isStress(activity: activity)
         var tags: [String: String] = [:]
         tags["user"] = user
-        tags["activity"] = activity
+        
+        if(isStress){
+            tags["stress"] = activity
+        }else{
+            tags["activity"] = activity
+        }
         var fields: [String: Any] = [:]
         fields["status"] = status ? 1:0
         let timeInterval = time.timeIntervalSince1970
@@ -87,6 +93,32 @@ class APIManager: NSObject {
                 handler(error)
             }
         }
+        
+//        if(isStress){
+//            for stress in stresses{
+//                if(activity != stress){
+//                    tags["stress"] = stress
+//                    fields["status"] = 0
+//
+//                    request = WriteRequest(influxdb: influxdb, precision: unit, database: database, measurement: measurement, tags: tags, fields: fields, time: timeInterval)
+//
+//                    Session.send(request) { result in
+//                        switch result {
+//                        case .success:
+//                            handler(nil)
+//
+//                        case .failure(let error):
+//                            handler(error)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+    }
+    
+    
+    func isStress( activity: String) -> Bool {
+        return (activity == "StressLevel1" || activity == "StressLevel2" || activity == "StressLevel3" || activity == "StressLevel4" || activity == "StressLevel5")
     }
     
     /// DBからラベルデータを削除する

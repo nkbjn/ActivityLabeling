@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DefaultConfig().setup()
         
         // NavigationBarの色を統一する
-        UINavigationBar.appearance().barTintColor = .flatBlack
+        UINavigationBar.appearance().barTintColor = .flatBlack()
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         

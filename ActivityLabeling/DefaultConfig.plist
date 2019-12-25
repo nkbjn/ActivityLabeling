@@ -9,7 +9,7 @@
 	<key>port</key>
 	<string>8086</string>
 	<key>database</key>
-	<string>app</string>
+	<string>test</string>
 	<key>measurement</key>
 	<string>label</string>
 	<key>activities</key>
@@ -31,6 +31,12 @@
 		<string>UsingSmartphone</string>
 		<string>Sleeping</string>
 		<string>Dressing</string>
+		<string>NULL</string>
+		<string>StressLevel1</string>
+		<string>StressLevel2</string>
+		<string>StressLevel3</string>
+		<string>StressLevel4</string>
+		<string>StressLevel5</string>
 	</array>
 </dict>
 </plist>

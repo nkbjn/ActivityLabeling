@@ -143,6 +143,7 @@ class LabelingViewController: UIViewController, UICollectionViewDelegate, UIColl
         let massage = self.selectStartMessage(activity: activity, isStress: isStress)
         let alert = isStress ? UIAlertController(title: "Select Stress Level", message: massage, preferredStyle: .alert) : UIAlertController(title: "Start Activity", message: massage, preferredStyle: .alert)
         let title = isStress ? "Select" : "Start"
+        
         alert.addAction(UIAlertAction(title: title, style: .default, handler: { action in
             self.api.write(time: time, activity: activity, status: status, handler: { error in
                 
