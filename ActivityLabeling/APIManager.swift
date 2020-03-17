@@ -82,7 +82,7 @@ class APIManager: NSObject {
         let timeInterval = time.timeIntervalSince1970
         
         let influxdb = InfluxDBClient(host: host, port: port, user: user, password: password, ssl: ssl)
-        let request = WriteRequest(influxdb: influxdb, precision: unit, database: database, measurement: measurement, tags: tags, fields: fields, time: timeInterval)
+        var request = WriteRequest(influxdb: influxdb, precision: unit, database: database, measurement: measurement, tags: tags, fields: fields, time: timeInterval)
         
         Session.send(request) { result in
             switch result {

@@ -9,7 +9,7 @@
 	<key>port</key>
 	<string>8086</string>
 	<key>database</key>
-	<string>test</string>
+	<string>test1</string>
 	<key>measurement</key>
 	<string>label</string>
 	<key>activities</key>

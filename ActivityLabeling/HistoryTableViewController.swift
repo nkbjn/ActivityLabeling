@@ -24,7 +24,7 @@ class HistoryTableViewController: UITableViewController {
         self.api.select(handler: { list, error in
             
             guard (error == nil) else {
-                let alert = UIAlertController(title: "Error", message: error.debugDescription, preferredStyle: .alert)
+                let alert = UIAlertController(title: "Errordesuyo", message: error.debugDescription, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alert, animated: true)
                 return
