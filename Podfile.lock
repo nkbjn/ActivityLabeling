@@ -4,7 +4,7 @@ PODS:
   - ChameleonFramework/Default (2.1.0)
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
-  - Eureka (5.1.0)
+  - Eureka (5.2.0)
   - Result (3.2.4)
 
 DEPENDENCIES:
@@ -30,7 +30,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   APIKit: a39ff72ac44efc15513fd1b98800f63c525be61b
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
-  Eureka: 18a5076dcf0c41f9cd9748aa1c42f4d11434bdae
+  Eureka: 820a761c700f6eaab3b60758f138e0d9b99072b3
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
 
 PODFILE CHECKSUM: 954639c76958f65593f468eae43abb82283fd698
